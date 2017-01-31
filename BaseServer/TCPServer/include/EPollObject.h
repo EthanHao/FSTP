@@ -13,7 +13,7 @@
 
 #ifndef EPOLLOBJECT_H
 #define EPOLLOBJECT_H
-
+#include "ErrorCode.h"
 class EPollObject {
 public:
     EPollObject();

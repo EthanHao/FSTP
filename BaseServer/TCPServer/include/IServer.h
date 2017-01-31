@@ -13,14 +13,14 @@
 
 #ifndef ISERVER_H
 #define ISERVER_H
-
+#include "ErrorCode.h"
 class IServer {
 public:
     //Initialize this server
-    eErrorCode Init() = 0;
+    virtual eErrorCode Init() = 0;
     
     //Shutdown this server
-    eErrorCode Shutdown() = 0;
+    virtual eErrorCode Shutdown() = 0;
 };
 
 #endif /* ISERVER_H */

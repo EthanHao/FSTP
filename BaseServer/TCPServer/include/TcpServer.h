@@ -20,7 +20,7 @@
 //get a connection lister object
 //get a group of IDataHandler
 
-class TcpServer : public IServer {
+class TcpServer  {
 public:
     TcpServer();
     TcpServer(const TcpServer& orig);

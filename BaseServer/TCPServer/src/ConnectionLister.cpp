@@ -13,12 +13,22 @@
 
 #include "ConnectionLister.h"
 
-ConnectionLister::ConnectionLister() {
+ConnectionLister::ConnectionLister(const std::vector<EPollObject*>& epolls) : m(epolls) {}
+
+ConnectionLister::ConnectionLister(const ConnectionLister& orig) : m(orig.m){}
+
+ConnectionLister::~ConnectionLister() 
+{
+    for (unsigned int i = 0; i < m.size(); i++)
+    {
+        delete m[i];
+    } 
 }
 
-ConnectionLister::ConnectionLister(const ConnectionLister& orig) {
+void ConnectionLister::Listen(int port) {
+    mPort = port;
+    
 }
 
-ConnectionLister::~ConnectionLister() {
-}
+
 

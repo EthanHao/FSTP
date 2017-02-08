@@ -14,12 +14,27 @@
 #ifndef CONNECTIONLISTER_H
 #define CONNECTIONLISTER_H
 
+#include <vector>
+#include <thread>
+#include "EPollObject.h"
+#include "SocketInfo.h"
+
 class ConnectionLister {
 public:
-    ConnectionLister();
+    ConnectionLister(const std::vector<EPollObject*>& epolls);
     ConnectionLister(const ConnectionLister& orig);
     virtual ~ConnectionLister();
+
+    void Listen(int port); 
+    void Stop();
+     
 private:
+    std::vector<EPollObject*> m; //vector of Epoll objects that this listener assigns sockets to
+    std::thread mWorker;
+    int mPort;
+    void HandleConnection();
+    SocketInfo* CreateSocket(int);
+    
 
 };
 

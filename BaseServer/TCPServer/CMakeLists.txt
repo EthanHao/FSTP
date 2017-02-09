@@ -12,9 +12,11 @@ MESSAGE(STATUS "Binary dir: " ${PROJECT_BINARY_DIR})
 MESSAGE(STATUS "Source dir: " ${PROJECT_SOURCE_DIR})
 #set extern libraries
 #SET(LIBRARIES /usr/lib/x86_64-linux-gnu/libm.so)
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
 #add executable file
 ADD_EXECUTABLE(TCPServer ${CPP_FILES})
 #add link library
-#TARGET_LINK_LIBRARIES(sqrtDemoB m)
+TARGET_LINK_LIBRARIES(TCPServer Threads::Threads)
 
 #set (EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}/bin" )

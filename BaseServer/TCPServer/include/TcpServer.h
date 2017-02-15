@@ -18,15 +18,15 @@
 
 //Tcp server is a concrete Iserver.
 //get a connection lister object
-//get a group of IDataHandler
+//get a DataDealerPool
 
-class TcpServer : public IServer {
+class TcpServer{
 public:
     TcpServer();
     TcpServer(const TcpServer& orig);
     virtual ~TcpServer();
 private:
-
+    
 };
 
 #endif /* TCPSERVER_H */

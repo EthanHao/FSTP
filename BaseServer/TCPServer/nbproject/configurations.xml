@@ -42,18 +42,24 @@ Contributor(s):
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <df root="." name="0">
       <df name="include">
-        <in>ConnectionLister.h</in>
+        <in>CommonMacro.h</in>
+        <in>ConnectionListener.h</in>
+        <in>DataDealer.h</in>
+        <in>DataDealerCenter.h</in>
         <in>EPollObject.h</in>
         <in>ErrorCode.h</in>
+        <in>Exception.h</in>
         <in>IServer.h</in>
         <in>SocketInfo.h</in>
-        <in>TcpServer.cpp</in>
         <in>TcpServer.h</in>
       </df>
       <df name="src">
-        <in>ConnectionLister.cpp</in>
+        <in>ConnectionListener.cpp</in>
+        <in>DataDealer.cpp</in>
+        <in>DataDealerCenter.cpp</in>
         <in>EPollObject.cpp</in>
         <in>SocketInfo.cpp</in>
+        <in>TcpServer.cpp</in>
         <in>welcome.cc</in>
       </df>
     </df>
@@ -99,17 +105,29 @@ Contributor(s):
           <preBuildFirst>true</preBuildFirst>
         </preBuild>
       </makefileType>
+      <item path="include/CommonMacro.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/DataDealer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/DataDealerCenter.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/ErrorCode.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/TcpServer.cpp" ex="false" tool="1" flavor2="0">
+      <item path="include/Exception.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/TcpServer.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/ConnectionLister.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/ConnectionListener.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/DataDealer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/DataDealerCenter.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/EPollObject.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/SocketInfo.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/TcpServer.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/welcome.cc" ex="false" tool="1" flavor2="0">
       </item>
@@ -146,25 +164,37 @@ Contributor(s):
           <preBuildFirst>true</preBuildFirst>
         </preBuild>
       </makefileType>
-      <item path="include/ConnectionLister.h" ex="false" tool="3" flavor2="0">
+      <item path="include/CommonMacro.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/ConnectionListener.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/DataDealer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/DataDealerCenter.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/EPollObject.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/ErrorCode.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/Exception.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/IServer.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/SocketInfo.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/TcpServer.cpp" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="include/TcpServer.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/ConnectionLister.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/ConnectionListener.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/DataDealer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/DataDealerCenter.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/EPollObject.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/SocketInfo.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/TcpServer.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/welcome.cc" ex="false" tool="1" flavor2="9">
         <ccTool flags="0">

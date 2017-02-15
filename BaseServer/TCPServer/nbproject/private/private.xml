@@ -4,4 +4,18 @@
         <activeConfTypeElem>0</activeConfTypeElem>
         <activeConfIndexElem>0</activeConfIndexElem>
     </data>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/home/ethan/NetBeansProjects/FSTP/BaseServer/TCPServer/include/IServer.h</file>
+            <file>file:/home/ethan/NetBeansProjects/FSTP/BaseServer/TCPServer/src/ConnectionLister.cpp</file>
+            <file>file:/home/ethan/NetBeansProjects/FSTP/BaseServer/TCPServer/include/ConnectionLister.h</file>
+            <file>file:/home/ethan/NetBeansProjects/FSTP/BaseServer/TCPServer/include/EPollObject.h</file>
+            <file>file:/home/ethan/NetBeansProjects/FSTP/BaseServer/TCPServer/CMakeLists.txt</file>
+            <file>file:/home/ethan/NetBeansProjects/FSTP/BaseServer/TCPServer/src/welcome.cc</file>
+            <file>file:/home/ethan/NetBeansProjects/FSTP/BaseServer/TCPServer/include/TcpServer.h</file>
+            <file>file:/home/ethan/NetBeansProjects/FSTP/BaseServer/TCPServer/include/SocketInfo.h</file>
+            <file>file:/home/ethan/NetBeansProjects/FSTP/BaseServer/TCPServer/include/ErrorCode.h</file>
+        </group>
+    </open-files>
 </project-private>

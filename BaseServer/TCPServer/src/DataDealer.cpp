@@ -5,20 +5,20 @@
  */
 
 /* 
- * File:   IServer.h
+ * File:   DataDealer.cpp
  * Author: ethan
- *
- * Created on January 30, 2017, 5:21 PM
+ * 
+ * Created on February 14, 2017, 7:36 PM
  */
 
-#ifndef ISERVER_H
-#define ISERVER_H
-#include "ErrorCode.h"
+#include "DataDealer.h"
 
-namespace CTCPSERVER {
-
-   
+DataDealer::DataDealer() {
 }
 
-#endif /* ISERVER_H */
+DataDealer::DataDealer(const DataDealer& orig) {
+}
+
+DataDealer::~DataDealer() {
+}
 

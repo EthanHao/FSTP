@@ -42,18 +42,24 @@ Contributor(s):
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <df root="." name="0">
       <df name="include">
-        <in>ConnectionLister.h</in>
+        <in>CommonMacro.h</in>
+        <in>ConnectionListener.h</in>
+        <in>DataDealer.h</in>
+        <in>DataDealerCenter.h</in>
         <in>EPollObject.h</in>
         <in>ErrorCode.h</in>
+        <in>Exception.h</in>
         <in>IServer.h</in>
         <in>SocketInfo.h</in>
-        <in>TcpServer.cpp</in>
         <in>TcpServer.h</in>
       </df>
       <df name="src">
-        <in>ConnectionLister.cpp</in>
+        <in>ConnectionListener.cpp</in>
+        <in>DataDealer.cpp</in>
+        <in>DataDealerCenter.cpp</in>
         <in>EPollObject.cpp</in>
         <in>SocketInfo.cpp</in>
+        <in>TcpServer.cpp</in>
         <in>welcome.cc</in>
       </df>
     </df>
@@ -67,13 +73,13 @@ Contributor(s):
       </toolsSet>
       <compile>
         <compiledirpicklist>
-          <compiledirpicklistitem>${AUTO_FOLDER}</compiledirpicklistitem>
           <compiledirpicklistitem>.</compiledirpicklistitem>
+          <compiledirpicklistitem>${AUTO_FOLDER}</compiledirpicklistitem>
         </compiledirpicklist>
         <compiledir>${AUTO_FOLDER}</compiledir>
         <compilecommandpicklist>
-          <compilecommandpicklistitem>${AUTO_COMPILE}</compilecommandpicklistitem>
           <compilecommandpicklistitem>${MAKE} ${ITEM_NAME}.o</compilecommandpicklistitem>
+          <compilecommandpicklistitem>${AUTO_COMPILE}</compilecommandpicklistitem>
         </compilecommandpicklist>
         <compilecommand>${AUTO_COMPILE}</compilecommand>
       </compile>
@@ -112,13 +118,13 @@ Contributor(s):
       </toolsSet>
       <compile>
         <compiledirpicklist>
-          <compiledirpicklistitem>${AUTO_FOLDER}</compiledirpicklistitem>
           <compiledirpicklistitem>.</compiledirpicklistitem>
+          <compiledirpicklistitem>${AUTO_FOLDER}</compiledirpicklistitem>
         </compiledirpicklist>
         <compiledir>${AUTO_FOLDER}</compiledir>
         <compilecommandpicklist>
-          <compilecommandpicklistitem>${AUTO_COMPILE}</compilecommandpicklistitem>
           <compilecommandpicklistitem>${MAKE} ${ITEM_NAME}.o</compilecommandpicklistitem>
+          <compilecommandpicklistitem>${AUTO_COMPILE}</compilecommandpicklistitem>
         </compilecommandpicklist>
         <compilecommand>${AUTO_COMPILE}</compilecommand>
       </compile>

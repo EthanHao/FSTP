@@ -5,21 +5,22 @@
  */
 
 /* 
- * File:   SocketInfo.cpp
+ * File:   DataDealerCenter.cpp
  * Author: ethan
  * 
- * Created on January 30, 2017, 5:27 PM
+ * Created on February 14, 2017, 7:34 PM
  */
 
-#include "SocketInfo.h"
+#include "DataDealerCenter.h"
 namespace CTCPSERVER {
 
-    SocketInfo::SocketInfo() {
+    DataDealerCenter::DataDealerCenter() {
     }
 
-    SocketInfo::SocketInfo(const SocketInfo& orig) {
+    DataDealerCenter::DataDealerCenter(const DataDealerCenter& orig) {
     }
 
-    SocketInfo::~SocketInfo() {
+    DataDealerCenter::~DataDealerCenter() {
     }
 }
+

@@ -13,12 +13,17 @@
 
 #ifndef ERRORCODE_H
 #define ERRORCODE_H
+namespace CTCPSERVER {
+#define BASE_ERROR 0x400
 
-enum eErrorCode{
-    eSuccess = 0,
     
-};
+enum eErrorCode {
+        eSuccess = 0,
+        eIsRunning = BASE_ERROR,
+        eError2 = BASE_ERROR + 1,
 
+    };
+}
 
 #endif /* ERRORCODE_H */
 

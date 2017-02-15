@@ -5,20 +5,17 @@
  */
 
 /* 
- * File:   IServer.h
+ * File:   CommonMacro.h
  * Author: ethan
  *
- * Created on January 30, 2017, 5:21 PM
+ * Created on February 14, 2017, 10:54 AM
  */
 
-#ifndef ISERVER_H
-#define ISERVER_H
-#include "ErrorCode.h"
+#ifndef COMMONMACRO_H
+#define COMMONMACRO_H
 
-namespace CTCPSERVER {
+#define FAILED(ret) ( (ret) < 0)
 
-   
-}
 
-#endif /* ISERVER_H */
+#endif /* COMMONMACRO_H */
 

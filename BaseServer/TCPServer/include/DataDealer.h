@@ -14,14 +14,49 @@
 #ifndef DATADEALER_H
 #define DATADEALER_H
 
-class DataDealer {
-public:
-    DataDealer();
-    DataDealer(const DataDealer& orig);
-    virtual ~DataDealer();
-private:
+#include "ErrorCode.h"
+#include "EPollObject.h"
+#include <memory>
+#include <atomic>
+#include "Exception.h"
+#include <thread>
+#include "SocketInfo.h"
+namespace CTCPSERVER {
 
-};
-
+    class DataDealer {
+    public:
+        DataDealer(int nNum) throw (EpollExceptionCreateFailed&,
+                std::bad_alloc&,
+                ThreadExceptionCreateFailed&);
+        DataDealer(const DataDealer& orig) = delete;
+        virtual ~DataDealer();
+        
+        //Run this Dealer in his own thread
+        eErrorCode Run()  throw(ThreadExceptionCreateFailed&);
+        //the callback function of thread
+        void TheadCallback();
+        
+        //Stop listening , means stopping the thread
+        inline bool Stop() {
+            if(mbRunning == false) 
+                return false;
+            mbRunning = false;
+            return true;
+        }
+        
+        //add a socket to this dealer
+        eErrorCode AddSocketItem(int nfd, SocketInfo * const npSocketInfo) throw(EpollExceptionCtlFailed&);
+        //delete a socket from this dealer
+        eErrorCode DeleteSoecktItem(int nfd) throw(EpollExceptionCtlFailed&);
+    private:
+        const int mnMaxNumOfSocket;
+        std::unique_ptr<EPollObject> mpEpollObject;
+        std::unique_ptr<struct epoll_event[]> mpEpollEvents; 
+        
+        //thread content
+        std::thread mThread;
+        std::atomic<bool> mbRunning;
+    };
+}
 #endif /* DATADEALER_H */
 

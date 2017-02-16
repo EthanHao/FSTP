@@ -11,16 +11,38 @@
  * Created on February 14, 2017, 7:34 PM
  */
 
-#include "DataDealerCenter.h"
+#include "../include/DataDealerCenter.h"
 namespace CTCPSERVER {
 
-    DataDealerCenter::DataDealerCenter() {
+    DataDealerCenter::DataDealerCenter(int nNum,int nMaxSocketSizePerDealer)throw (EpollExceptionCreateFailed&,
+                std::bad_alloc&,
+                ThreadExceptionCreateFailed&):
+                    mnNumOfDealers(nNum),
+                    mnMaxSocketSizePerDealer(nMaxSocketSizePerDealer){
+        
+        //Allocate a chunk of memory to store the socket info list
+        std::unique_ptr<MemoryPool<SocketInfo>> lpMemoryPool(new MemoryPool<SocketInfo>(mnMaxSocketSizePerDealer));
+        mpMemoryPool = std::move(lpMemoryPool);
+        
+        //Create a bunch of dealer
+        for(int i = 0 ; i < nNum ; i++)
+        {
+            std::unique_ptr<DataDealer> lpDeal(new DataDealer(nMaxSocketSizePerDealer));
+            mpDealers.push_back(std::move(lpDeal));
+        }
+      
+         
     }
 
-    DataDealerCenter::DataDealerCenter(const DataDealerCenter& orig) {
-    }
 
     DataDealerCenter::~DataDealerCenter() {
+    }
+    
+    eErrorCode  DataDealerCenter::DispatchSocket(int nfd){
+        //Assign a index of socket info for this file descriptor
+        
+        //Assign this nfd to a Data Dealer
+        
     }
 }
 

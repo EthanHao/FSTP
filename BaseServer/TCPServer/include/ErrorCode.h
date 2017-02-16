@@ -20,7 +20,7 @@ namespace CTCPSERVER {
 enum eErrorCode {
         eSuccess = 0,
         eIsRunning = BASE_ERROR,
-        eError2 = BASE_ERROR + 1,
+        eInvalidObject = BASE_ERROR + 1,
 
     };
 }

@@ -25,13 +25,14 @@ public:
     ConnectionListener(const ConnectionListener& orig);
     virtual ~ConnectionListener();
 
-    void Listen(int port); 
+    int Listen(int port); 
     void Stop();
      
 private:
     std::vector<EPollObject*> mEpolls; //vector of Epoll objects that this listener assigns sockets to
     std::thread mWorker;
     int mPort;
+    bool running;
     
     void HandleConnections(int sockfd, struct sockaddr_in cli_addr, socklen_t clilen);
     void CreateSocketInfo(int fd);

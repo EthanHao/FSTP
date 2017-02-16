@@ -21,9 +21,9 @@
 #include "ConnectionListener.h"
 #include "SocketInfo.h"
 
-ConnectionListener::ConnectionListener(int port, const std::vector<EPollObject*>& epolls) : mWorker(), mPort(port), mEpolls(epolls) {}
+ConnectionListener::ConnectionListener(int port, const std::vector<EPollObject*>& epolls) : mPort(port), mEpolls(epolls), running(false) {}
 
-ConnectionListener::ConnectionListener(const ConnectionListener& orig) : mWorker(), mPort(orig.mPort), mEpolls(orig.mEpolls){}
+ConnectionListener::ConnectionListener(const ConnectionListener& orig) : mPort(orig.mPort), mEpolls(orig.mEpolls), running(orig.running){}
 
 ConnectionListener::~ConnectionListener() 
 {
@@ -34,17 +34,17 @@ ConnectionListener::~ConnectionListener()
 }
 
 //take a port number, 
-void ConnectionListener::Listen(int port) 
+int ConnectionListener::Listen(int port) 
 {
     int sockfd;
     socklen_t clilen;
     struct sockaddr_in serv_addr, cli_addr;
     
+    //create socket
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    if (sockfd < 0) 
-         
+    if (sockfd < 0)        
     {
-        printf("ERROR opening socket\n");
+        return -1;
     }
         
      memset(&serv_addr, 0, sizeof(serv_addr));
@@ -54,34 +54,40 @@ void ConnectionListener::Listen(int port)
      
     if (bind(sockfd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0)
     {
-        printf("ERROR on binding\n");
+        return -1;
     }
               
-     listen(sockfd,5);
+     listen(sockfd, 5);
      clilen = sizeof(cli_addr);
+     running = true;
      mWorker = std::thread([=]{HandleConnections(sockfd, cli_addr, clilen);});
-     
+     return 0;
     
 }
 
 void ConnectionListener::Stop() 
 {
+    running = false;
     mWorker.join();
 }
 
 void ConnectionListener::HandleConnections(int sockfd, struct sockaddr_in cli_addr, socklen_t clilen)
 {
     
-    while(true)
+    while(running)
     {
         int newSock;
-        newSock = accept(sockfd, (struct sockaddr *)&cli_addr, &clilen);
+        
+        //block until there is an incoming connection
+        newSock = accept(sockfd, (struct sockaddr *)&cli_addr, &clilen); 
         
         if (newSock < 0)
         {
             printf("Error on accept\n");
             continue;
         }
+        
+        ConnectionListener::CreateSocketInfo(newSock);
   
         
     }

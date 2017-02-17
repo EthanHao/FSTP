@@ -19,18 +19,21 @@
 #include <atomic>
 #include "Exception.h"
 #include <thread>
+#include "DataCenterInterface.h"
+
 namespace CTCPSERVER {
 
     class ConnectionListener {
     public:
-        ConnectionListener(const std::string& nIP, int nPort,int nMaxBacklogSize)
+        ConnectionListener(const std::string& nIP, int nPort,int nMaxBacklogSize, std::shared_ptr<IDataCenterInterface> & npDataCenter)
                 throw(SocketExceptionCreateFailed&,
                 SocketExceptionSetOptionFailed&,
                 SocketExceptionBindFailed&,
                 SocketExceptionListenFailed&,
                 EpollExceptionCreateFailed&,
                 EpollExceptionCtlFailed&,
-                std::bad_alloc&);
+                std::bad_alloc&,
+                ThreadExceptionCreateFailed&);
         
         ConnectionListener(const ConnectionListener& orig) = delete;
         
@@ -41,11 +44,20 @@ namespace CTCPSERVER {
         
         //the callback function of thread
         void TheadCallback();
-        void Accept(epoll_event * npEvent);
+        void Accept(epoll_event * npEvent) throw(SocketExceptionAcceptFailed&,SocketExceptionSetOptionFailed&);
         
         //Stop listening , means stopping the thread
         inline bool Stop() {
-            if(mbRunning == false) return false;
+            if(mbRunning == false || !mThread.joinable()) 
+                return false;
+            mbRunning = false;
+            return true;
+        }
+        
+        inline bool StopAndWait() {
+            if(mbRunning == false || !mThread.joinable())
+                return false;
+            mThread.join();
             mbRunning = false;
             return true;
         }
@@ -60,6 +72,9 @@ namespace CTCPSERVER {
         //thread content
         std::thread mThread;
         std::atomic<bool> mbRunning;
+        
+        //The pointer to the dataCenter
+        std::shared_ptr<IDataCenterInterface>  mpDataCenter;
     };
 }
 #endif /* CONNECTIONLISTER_H */

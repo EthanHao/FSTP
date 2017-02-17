@@ -102,7 +102,11 @@ namespace CTCPSERVER {
         SocketExceptionListenFailed(const int& nErrorNo) : SocketException(nErrorNo) {
         }
     };
-    
+     class SocketExceptionAcceptFailed : public SocketException {
+    public:
+        SocketExceptionAcceptFailed(const int& nErrorNo) : SocketException(nErrorNo) {
+        }
+    };
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Thread Exception
     class ThreadException : public std::exception {

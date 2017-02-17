@@ -36,14 +36,21 @@ namespace CTCPSERVER {
         //the callback function of thread
         void TheadCallback();
         
-        //Stop listening , means stopping the thread
+       //Stop Data Reading and Writing , means stopping the thread
         inline bool Stop() {
-            if(mbRunning == false) 
+            if(mbRunning == false || !mThread.joinable()) 
                 return false;
             mbRunning = false;
             return true;
         }
         
+        inline bool StopAndWait() {
+            if(mbRunning == false || !mThread.joinable())
+                return false;
+            mThread.join();
+            mbRunning = false;
+            return true;
+        }
         //add a socket to this dealer
         eErrorCode AddSocketItem(int nfd, SocketInfo * const npSocketInfo) throw(EpollExceptionCtlFailed&);
         //delete a socket from this dealer

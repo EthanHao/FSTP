@@ -19,12 +19,13 @@
 #include <vector>
 #include <map>
 #include "MemoryPool.h"
+#include "DataCenterInterface.h"
 //Create a bunch of Dealers 
 //Dispatch socket to a specified dealer
 //for simplicity this class could be singleton 
 namespace CTCPSERVER {
 
-    class DataDealerCenter {
+    class DataDealerCenter : public IDataCenterInterface{
     public:
         DataDealerCenter(int nNum,int nMaxSocketSize)throw (EpollExceptionCreateFailed&,
                 std::bad_alloc&,
@@ -33,7 +34,7 @@ namespace CTCPSERVER {
         virtual ~DataDealerCenter();
         
         //Add a Socket File Descriptor to deal with its reading or writing operation
-        eErrorCode DispatchSocket(int nfd);
+        virtual eErrorCode DispatchSocket(int nfd) throw(EpollExceptionCtlFailed&);
     private:
         const int mnNumOfDealers;
         const int mnMaxSocketSizePerDealer;

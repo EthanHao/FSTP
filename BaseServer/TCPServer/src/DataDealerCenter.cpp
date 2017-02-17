@@ -25,23 +25,26 @@ namespace CTCPSERVER {
         mpMemoryPool = std::move(lpMemoryPool);
         
         //Create a bunch of dealer
-        for(int i = 0 ; i < nNum ; i++)
+        for(int i = 0 ; i < mnNumOfDealers ; i++)
         {
             std::unique_ptr<DataDealer> lpDeal(new DataDealer(nMaxSocketSizePerDealer));
             mpDealers.push_back(std::move(lpDeal));
         }
-      
-         
     }
 
 
     DataDealerCenter::~DataDealerCenter() {
     }
     
-    eErrorCode  DataDealerCenter::DispatchSocket(int nfd){
+    eErrorCode  DataDealerCenter::DispatchSocket(int nfd)throw(EpollExceptionCtlFailed&){
+        if(!mpMemoryPool || mpDealers.size() != mnNumOfDealers)
+            return eErrorCode::eInvalidObject;
         //Assign a index of socket info for this file descriptor
-        
+        SocketInfo * lpSocket = mpMemoryPool->alloc();
+        if(lpSocket == nullptr)
+            return eErrorCode::eMemoryPoolIsFull;
         //Assign this nfd to a Data Dealer
+        return mpDealers[nfd%mnNumOfDealers]->AddSocketItem(nfd,lpSocket);
         
     }
 }

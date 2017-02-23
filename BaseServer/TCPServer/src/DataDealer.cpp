@@ -14,16 +14,25 @@
 #include "../include/DataDealer.h"
 namespace CTCPSERVER {
 
-    DataDealer::DataDealer(int nNum) throw (EpollExceptionCreateFailed&,
+    DataDealer::DataDealer(int nNum,const ServerInfo& nBackendServer ) throw (EpollExceptionCreateFailed&,
             std::bad_alloc&,
             ThreadExceptionCreateFailed&) :
-            mnMaxNumOfSocket(nNum){
+            mnMaxNumOfSocket(nNum),
+            mBackendServer(nBackendServer){
+        
          std::unique_ptr<EPollObject> lpEpoll(new EPollObject(mnMaxNumOfSocket));
          mpEpollObject = std::move(lpEpoll);
          
          //allocate memory for the event array
         std::unique_ptr<struct epoll_event[]> lpEvents(new epoll_event[mnMaxNumOfSocket],std::default_delete<struct epoll_event[]>());
         mpEpollEvents = std::move(lpEvents);
+        
+        //Connect to the backend Server
+        if(!mBackendServer.IsEnd()) {
+            //we got the backend server, we must connect to backend server via socket. and after connecting,
+            //should add this socket to the epoll
+            Connect();
+        }
         
         //Run
         mbRunning = false;
@@ -34,9 +43,16 @@ namespace CTCPSERVER {
         //Wait the termination of the thread
         StopAndWait();
     }
+    //Connect to the backend Server
+    eErrorCode DataDealer::Connect(){
+        mBackendSocket = ::socket(AF_INET, SOCK_STREAM, SOCK_NONBLOCK);
+        if(FAILED(mBackendSocket))
+            throw SocketExceptionCreateFailed(errno);
+    }
     
-    //T
-    void DataDealer::TheadCallback(){
+    
+    //Thread call back function
+    void DataDealer::TheadCallback() {
         
         while(mbRunning && mpEpollObject && mpEpollEvents)
         {
@@ -46,7 +62,7 @@ namespace CTCPSERVER {
                 //accept this client one by one
                 for (int i = 0; i < nfds; i++){
                     try {
-                        Accept(&mpEpollEvents[i]);
+                        //Accept(&mpEpollEvents[i]);
                     }  catch (std::exception& e) {
                         //Log the reason
                         //Continue to work

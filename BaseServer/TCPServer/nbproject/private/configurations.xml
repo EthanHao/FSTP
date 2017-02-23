@@ -52,6 +52,7 @@ Contributor(s):
         <in>Exception.h</in>
         <in>IServer.h</in>
         <in>MemoryPool.h</in>
+        <in>ServerInfo.h</in>
         <in>SocketInfo.h</in>
         <in>TcpServer.h</in>
       </df>

@@ -16,7 +16,8 @@
 
 #include "ConnectionListener.h"
 #include "DataCenterInterface.h"
-
+#include "ServerInfo.h"
+#include <vector>
 namespace CTCPSERVER {
     //Tcp server is a concrete Iserver.
     //get a connection lister object
@@ -24,7 +25,7 @@ namespace CTCPSERVER {
 
     class TcpServer {
     public:
-        TcpServer(const std::string& nIP, int nPort,int nNumDealer,int nMaxSocketSizePerDealer)
+        TcpServer(const std::string& nIP, int nPort,int nNumDealer,int nMaxSocketSizePerDealer,const std::vector<ServerInfo> & nBackServers)
                  throw(SocketExceptionCreateFailed&,
                 SocketExceptionSetOptionFailed&,
                 SocketExceptionBindFailed&,
@@ -32,7 +33,9 @@ namespace CTCPSERVER {
                 EpollExceptionCreateFailed&,
                 EpollExceptionCtlFailed&,
                 std::bad_alloc&,
-                ThreadExceptionCreateFailed&);
+                ThreadExceptionCreateFailed&,
+                LogicalExceptionTooManyBackendServer&,
+                LogicalExceptionNoBackendServer&);
         TcpServer(const TcpServer& orig) = delete;
         virtual ~TcpServer() = default;
       

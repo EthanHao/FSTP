@@ -14,20 +14,27 @@
 #include "../include/DataDealerCenter.h"
 namespace CTCPSERVER {
 
-    DataDealerCenter::DataDealerCenter(int nNum,int nMaxSocketSizePerDealer)throw (EpollExceptionCreateFailed&,
+    DataDealerCenter::DataDealerCenter(int nNum,int nMaxSocketSizePerDealer,const std::vector<ServerInfo> & nBackServers)throw (EpollExceptionCreateFailed&,
                 std::bad_alloc&,
-                ThreadExceptionCreateFailed&):
+                ThreadExceptionCreateFailed&,
+                LogicalExceptionTooManyBackendServer&,
+                LogicalExceptionNoBackendServer&):
                     mnNumOfDealers(nNum),
                     mnMaxSocketSizePerDealer(nMaxSocketSizePerDealer){
         
+        if(nBackServers.size() > nNum)
+            throw LogicalExceptionTooManyBackendServer(0,nBackServers.size());
+        if(nBackServers.size() == 0)
+            throw LogicalExceptionNoBackendServer(0);
         //Allocate a chunk of memory to store the socket info list
         std::unique_ptr<MemoryPool<SocketInfo>> lpMemoryPool(new MemoryPool<SocketInfo>(mnMaxSocketSizePerDealer));
         mpMemoryPool = std::move(lpMemoryPool);
         
         //Create a bunch of dealer
+        int nSizeOfBackendServer = nBackServers.size();
         for(int i = 0 ; i < mnNumOfDealers ; i++)
         {
-            std::unique_ptr<DataDealer> lpDeal(new DataDealer(nMaxSocketSizePerDealer));
+            std::unique_ptr<DataDealer> lpDeal(new DataDealer(nMaxSocketSizePerDealer,nBackServers[i % nSizeOfBackendServer]));
             mpDealers.push_back(std::move(lpDeal));
         }
     }

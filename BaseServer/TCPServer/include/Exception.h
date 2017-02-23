@@ -150,6 +150,39 @@ namespace CTCPSERVER {
         ThreadExceptionCreateFailed(const int& nErrorNo) : ThreadException(nErrorNo) {
         }
     };
+    
+    
+    ////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //Thread Exception
+    class LogicalException : public std::exception {
+    public:
+
+        LogicalException(const int& nErrorNo,const int& nParam1) : _errorno(nErrorNo),_param1(nParam1) {
+        }
+
+        const char* what() const throw () {
+            return strerror(_errorno);
+        }
+        const int GetErrorNo() {
+            return _errorno;
+        }
+    private:
+        const int _errorno;
+        const int _param1;
+
+    };
+    
+    class LogicalExceptionTooManyBackendServer : public LogicalException {
+    public:
+        LogicalExceptionTooManyBackendServer(const int& nErrorNo,const int& nParam = 0) : LogicalException(nErrorNo,nParam) {
+        }
+    };
+    class LogicalExceptionNoBackendServer : public LogicalException {
+    public:
+        LogicalExceptionNoBackendServer(const int& nErrorNo,const int& nParam = 0) : LogicalException(nErrorNo,nParam) {
+        }
+    };
 }
 
 #endif /* EXCEPTION_H */

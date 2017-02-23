@@ -28,9 +28,11 @@ namespace CTCPSERVER {
 
     class DataDealerCenter : public IDataCenterInterface{
     public:
-        DataDealerCenter(int nNum,int nMaxSocketSizePerDealer)throw (EpollExceptionCreateFailed&,
+        DataDealerCenter(int nNum,int nMaxSocketSizePerDealer,const std::vector<ServerInfo> & nBackServers)throw (EpollExceptionCreateFailed&,
                 std::bad_alloc&,
-                ThreadExceptionCreateFailed&);
+                ThreadExceptionCreateFailed&,
+                LogicalExceptionTooManyBackendServer&,
+                LogicalExceptionNoBackendServer&);
         DataDealerCenter(const DataDealerCenter& orig) = delete;
         virtual ~DataDealerCenter() = default;
         

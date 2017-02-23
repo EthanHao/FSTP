@@ -21,15 +21,19 @@
 #include "Exception.h"
 #include <thread>
 #include "SocketInfo.h"
+#include "ServerInfo.h"
 namespace CTCPSERVER {
 
     class DataDealer {
     public:
-        DataDealer(int nNum) throw (EpollExceptionCreateFailed&,
+        DataDealer(int nNum,const ServerInfo& nBackendServer ) throw (EpollExceptionCreateFailed&,
                 std::bad_alloc&,
                 ThreadExceptionCreateFailed&);
         DataDealer(const DataDealer& orig) = delete;
         virtual ~DataDealer();
+        
+        //Connect to the backend Server
+        eErrorCode Connect();
         
         //Run this Dealer in his own thread
         eErrorCode Run()  throw(ThreadExceptionCreateFailed&);
@@ -56,7 +60,7 @@ namespace CTCPSERVER {
         //delete a socket from this dealer
         eErrorCode DeleteSoecktItem(int nfd) throw(EpollExceptionCtlFailed&);
         
-        //
+        //Data things
         eErrorCode DataReadAndWritting();
     private:
         const int mnMaxNumOfSocket;
@@ -67,6 +71,11 @@ namespace CTCPSERVER {
         //thread content
         std::thread mThread;
         std::atomic<bool> mbRunning;
+        
+        //Backend Server, we could pass the data packet to the backend server via socket
+        ServerInfo mBackendServer;
+        int mBackendSocket;
+        
     };
 }
 #endif /* DATADEALER_H */

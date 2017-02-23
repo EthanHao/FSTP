@@ -15,16 +15,20 @@
 #include "DataDealerCenter.h"
 namespace CTCPSERVER {
 
-    TcpServer::TcpServer(const std::string& nIP, int nPort,int nNumDealer,int nMaxSocketSizePerDealer)throw(SocketExceptionCreateFailed&,
+    TcpServer::TcpServer(const std::string& nIP, int nPort,int nNumDealer,int nMaxSocketSizePerDealer,const std::vector<ServerInfo> & nBackServers)throw(SocketExceptionCreateFailed&,
                 SocketExceptionSetOptionFailed&,
                 SocketExceptionBindFailed&,
                 SocketExceptionListenFailed&,
                 EpollExceptionCreateFailed&,
                 EpollExceptionCtlFailed&,
                 std::bad_alloc&,
-                ThreadExceptionCreateFailed&) {
-        std::unique_ptr<IDataCenterInterface> lpCenter(new DataDealerCenter(nNumDealer,nMaxSocketSizePerDealer));
+                ThreadExceptionCreateFailed&,
+                LogicalExceptionTooManyBackendServer&,
+                LogicalExceptionNoBackendServer&) {
+        
+        std::unique_ptr<IDataCenterInterface> lpCenter(new DataDealerCenter(nNumDealer,nMaxSocketSizePerDealer,nBackServers));
         mpDataCenter = std::move(lpCenter);
+        
         std::unique_ptr<ConnectionListener> lpListener(new ConnectionListener(nIP,nPort,nNumDealer*nMaxSocketSizePerDealer,mpDataCenter.get()));
         mpListener = std::move(lpListener);
     }

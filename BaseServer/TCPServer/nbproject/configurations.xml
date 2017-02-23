@@ -50,6 +50,7 @@ Contributor(s):
         <in>ErrorCode.h</in>
         <in>Exception.h</in>
         <in>IServer.h</in>
+        <in>ServerInfo.h</in>
         <in>SocketInfo.h</in>
         <in>TcpServer.h</in>
       </df>
@@ -86,9 +87,8 @@ Contributor(s):
       </toolsSet>
       <flagsDictionary>
         <element flagsID="0"
-                 commonFlags="-mtune=generic -march=x86-64 -fstack-protector-strong"/>
-        <element flagsID="1"
                  commonFlags="-mtune=generic -march=x86-64 -std=c++11 -fstack-protector-strong"/>
+        <element flagsID="1" commonFlags="-std=c++11"/>
       </flagsDictionary>
       <codeAssistance>
       </codeAssistance>
@@ -106,7 +106,7 @@ Contributor(s):
         </preBuild>
       </makefileType>
       <item path="src/ConnectionListener.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
+        <ccTool flags="0">
           <incDir>
             <pElem>include</pElem>
             <pElem>src</pElem>
@@ -117,8 +117,9 @@ Contributor(s):
       <item path="src/DataDealer.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="1">
           <incDir>
-            <pElem>src</pElem>
             <pElem>include</pElem>
+            <pElem>../Common/Clog/include</pElem>
+            <pElem>build/Debug</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -126,13 +127,13 @@ Contributor(s):
         <ccTool flags="1">
           <incDir>
             <pElem>include</pElem>
-            <pElem>src</pElem>
+            <pElem>../Common/Clog/include</pElem>
             <pElem>build/Debug</pElem>
           </incDir>
         </ccTool>
       </item>
       <item path="src/EPollObject.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
+        <ccTool flags="0">
           <incDir>
             <pElem>include</pElem>
             <pElem>src</pElem>
@@ -141,7 +142,7 @@ Contributor(s):
         </ccTool>
       </item>
       <item path="src/SocketInfo.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
+        <ccTool flags="0">
           <incDir>
             <pElem>src</pElem>
             <pElem>include</pElem>
@@ -153,7 +154,7 @@ Contributor(s):
         <ccTool flags="1">
           <incDir>
             <pElem>include</pElem>
-            <pElem>src</pElem>
+            <pElem>../Common/Clog/include</pElem>
             <pElem>build/Debug</pElem>
           </incDir>
         </ccTool>
@@ -214,6 +215,8 @@ Contributor(s):
       <item path="include/Exception.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/IServer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/ServerInfo.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/SocketInfo.h" ex="false" tool="3" flavor2="0">
       </item>

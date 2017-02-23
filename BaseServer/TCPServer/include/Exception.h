@@ -21,7 +21,10 @@ namespace CTCPSERVER {
     class EpollException : public std::exception {
     public:
 
-        EpollException(const int& nErrorNo) : _errorno(nErrorNo) {
+        EpollException(const int nErrorNo, const int nEpollHandle = 0,const int nSocketHandle = 0) : 
+            _errorno(nErrorNo), 
+            _epollHandle(nEpollHandle),
+            _socketHandle(nSocketHandle) {
         }
 
         const char* what() const throw () {
@@ -30,34 +33,46 @@ namespace CTCPSERVER {
         const int GetErrorNo() {
             return _errorno;
         }
+        const int GetSocketHandle() {
+            return _socketHandle;
+        }
+        const int GetEpollHandle() {
+            return _epollHandle;
+        }
     private:
         const int _errorno;
-
+        const int _epollHandle;
+        const int _socketHandle;
+      
     };
 
     class EpollExceptionCreateFailed : public EpollException {
     public:
-        EpollExceptionCreateFailed(const int& nErrorNo) : EpollException(nErrorNo) {
+        EpollExceptionCreateFailed(const int nErrorNo,const int nEpollHandle = 0,const int nSocketHandle = 0) : 
+            EpollException(nErrorNo,nEpollHandle,nSocketHandle) {
         }
     };
 
     class EpollExceptionCloseFailed : public EpollException {
     public:
-        EpollExceptionCloseFailed(const int& nErrorNo) : EpollException(nErrorNo) {
+        EpollExceptionCloseFailed(const int nErrorNo,const int nEpollHandle = 0,const int nSocketHandle = 0) : 
+            EpollException(nErrorNo,nEpollHandle,nSocketHandle) {
         }
 
     };
     
     class EpollExceptionCtlFailed : public EpollException {
     public:
-        EpollExceptionCtlFailed(const int& nErrorNo) : EpollException(nErrorNo) {
+        EpollExceptionCtlFailed(const int nErrorNo,const int nEpollHandle = 0,const int nSocketHandle = 0) : 
+            EpollException(nErrorNo,nEpollHandle,nSocketHandle) {
         }
 
     };
     
     class EpollExceptionWaitFailed : public EpollException {
     public:
-        EpollExceptionWaitFailed(const int& nErrorNo) : EpollException(nErrorNo) {
+        EpollExceptionWaitFailed(const int nErrorNo,const int nEpollHandle = 0,const int nSocketHandle = 0) : 
+            EpollException(nErrorNo,nEpollHandle,nSocketHandle) {
         }
 
     };
@@ -68,7 +83,7 @@ namespace CTCPSERVER {
     class SocketException : public std::exception {
     public:
 
-        SocketException(const int& nErrorNo) : _errorno(nErrorNo) {
+        SocketException(const int nErrorNo,const int nSocketHandle = 0) : _errorno(nErrorNo),_socketHandle(nSocketHandle) {
         }
 
         const char* what() const throw () {
@@ -77,34 +92,38 @@ namespace CTCPSERVER {
         const int GetErrorNo() {
             return _errorno;
         }
+        const int GetSocketHandle() {
+            return _socketHandle;
+        }
     private:
         const int _errorno;
+        const int _socketHandle;
 
     };
     
     class SocketExceptionCreateFailed : public SocketException {
     public:
-        SocketExceptionCreateFailed(const int& nErrorNo) : SocketException(nErrorNo) {
+        SocketExceptionCreateFailed(const int nErrorNo,const int nSocketHandle = 0) : SocketException(nErrorNo,nSocketHandle) {
         }
     };
     class SocketExceptionSetOptionFailed : public SocketException {
     public:
-        SocketExceptionSetOptionFailed(const int& nErrorNo) : SocketException(nErrorNo) {
+        SocketExceptionSetOptionFailed(const int nErrorNo,const int nSocketHandle = 0) : SocketException(nErrorNo,nSocketHandle){
         }
     };
     class SocketExceptionBindFailed : public SocketException {
     public:
-        SocketExceptionBindFailed(const int& nErrorNo) : SocketException(nErrorNo) {
+        SocketExceptionBindFailed(const int nErrorNo,const int nSocketHandle = 0) : SocketException(nErrorNo,nSocketHandle) {
         }
     };
     class SocketExceptionListenFailed : public SocketException {
     public:
-        SocketExceptionListenFailed(const int& nErrorNo) : SocketException(nErrorNo) {
+        SocketExceptionListenFailed(const int nErrorNo,const int nSocketHandle = 0) : SocketException(nErrorNo,nSocketHandle){
         }
     };
      class SocketExceptionAcceptFailed : public SocketException {
     public:
-        SocketExceptionAcceptFailed(const int& nErrorNo) : SocketException(nErrorNo) {
+        SocketExceptionAcceptFailed(const int nErrorNo,const int nSocketHandle = 0) : SocketException(nErrorNo,nSocketHandle) {
         }
     };
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

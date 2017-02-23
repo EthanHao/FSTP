@@ -55,8 +55,12 @@ namespace CTCPSERVER {
         eErrorCode AddSocketItem(int nfd, SocketInfo * const npSocketInfo) throw(EpollExceptionCtlFailed&);
         //delete a socket from this dealer
         eErrorCode DeleteSoecktItem(int nfd) throw(EpollExceptionCtlFailed&);
+        
+        //
+        eErrorCode DataReadAndWritting();
     private:
         const int mnMaxNumOfSocket;
+        //std::mutex mMutex;
         std::unique_ptr<EPollObject> mpEpollObject;
         std::unique_ptr<struct epoll_event[]> mpEpollEvents; 
         

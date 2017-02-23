@@ -14,20 +14,33 @@
 #ifndef TCPSERVER_H
 #define TCPSERVER_H
 
-#include "IServer.h"
+#include "ConnectionListener.h"
+#include "DataCenterInterface.h"
 
-//Tcp server is a concrete Iserver.
-//get a connection lister object
-//get a DataDealerPool
+namespace CTCPSERVER {
+    //Tcp server is a concrete Iserver.
+    //get a connection lister object
+    //get a DataDealerPool
 
-class TcpServer{
-public:
-    TcpServer();
-    TcpServer(const TcpServer& orig);
-    virtual ~TcpServer();
-private:
-    
-};
-
+    class TcpServer {
+    public:
+        TcpServer(const std::string& nIP, int nPort,int nNumDealer,int nMaxSocketSizePerDealer)
+                 throw(SocketExceptionCreateFailed&,
+                SocketExceptionSetOptionFailed&,
+                SocketExceptionBindFailed&,
+                SocketExceptionListenFailed&,
+                EpollExceptionCreateFailed&,
+                EpollExceptionCtlFailed&,
+                std::bad_alloc&,
+                ThreadExceptionCreateFailed&);
+        TcpServer(const TcpServer& orig) = delete;
+        virtual ~TcpServer() = default;
+      
+        eErrorCode Stop();
+    private:
+        std::unique_ptr<ConnectionListener> mpListener;
+        std::unique_ptr<IDataCenterInterface> mpDataCenter;
+    };
+}
 #endif /* TCPSERVER_H */
 

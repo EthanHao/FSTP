@@ -25,7 +25,7 @@ namespace CTCPSERVER {
 
     class ConnectionListener {
     public:
-        ConnectionListener(const std::string& nIP, int nPort,int nMaxBacklogSize, std::shared_ptr<IDataCenterInterface> & npDataCenter)
+        ConnectionListener(const std::string& nIP, int nPort,int nMaxBacklogSize,IDataCenterInterface* npDataCenter)
                 throw(SocketExceptionCreateFailed&,
                 SocketExceptionSetOptionFailed&,
                 SocketExceptionBindFailed&,
@@ -37,14 +37,16 @@ namespace CTCPSERVER {
         
         ConnectionListener(const ConnectionListener& orig) = delete;
         
-        virtual ~ConnectionListener();
+        virtual ~ConnectionListener() ;
 
         //Run this listener
         eErrorCode Run() throw(ThreadExceptionCreateFailed&);
         
         //the callback function of thread
         void TheadCallback();
-        void Accept(epoll_event * npEvent) throw(SocketExceptionAcceptFailed&,SocketExceptionSetOptionFailed&);
+        void Accept(epoll_event * npEvent) throw(SocketExceptionAcceptFailed&,
+                                                 SocketExceptionSetOptionFailed&,
+                                                 EpollExceptionCtlFailed&);
         
         //Stop listening , means stopping the thread
         inline bool Stop() {
@@ -74,7 +76,7 @@ namespace CTCPSERVER {
         std::atomic<bool> mbRunning;
         
         //The pointer to the dataCenter
-        std::shared_ptr<IDataCenterInterface>  mpDataCenter;
+        IDataCenterInterface* mpDataCenter;
     };
 }
 #endif /* CONNECTIONLISTER_H */

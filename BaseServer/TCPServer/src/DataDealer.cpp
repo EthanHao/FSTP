@@ -25,12 +25,14 @@ namespace CTCPSERVER {
         std::unique_ptr<struct epoll_event[]> lpEvents(new epoll_event[mnMaxNumOfSocket],std::default_delete<struct epoll_event[]>());
         mpEpollEvents = std::move(lpEvents);
         
-        //RUn
+        //Run
         mbRunning = false;
         Run();
     }
 
     DataDealer::~DataDealer() {
+        //Wait the termination of the thread
+        StopAndWait();
     }
     
     //T
@@ -38,18 +40,32 @@ namespace CTCPSERVER {
         
         while(mbRunning && mpEpollObject && mpEpollEvents)
         {
-            //Wait
-            int nfds =  mpEpollObject->Wait(&mpEpollEvents[0],mnMaxNumOfSocket);
-            if(nfds == -1)
-            {
-                //Log the error and 
+             try {
+                //Wait
+                int nfds = mpEpollObject->Wait(&mpEpollEvents[0], mnMaxNumOfSocket);
+                //accept this client one by one
+                for (int i = 0; i < nfds; i++){
+                    try {
+                        Accept(&mpEpollEvents[i]);
+                    }  catch (std::exception& e) {
+                        //Log the reason
+                        //Continue to work
+                    }
+                }
+            } catch (EpollExceptionWaitFailed& e) {
+               
+                //If it is system call interrupt then continue
+                if(e.GetErrorNo() == EINTR)
+                    continue;
+                
+                //Else Exit this thread,
+                //Log the reason to exit the thread
                 mbRunning = false;
                 break;
+            } catch (std::exception& e) {
+                //Log the reason
+                //Continue
             }
-            
-            //accept this client one by one
-            for(int i = 0; i < nfds ; i++)
-               ;
         }
     }
     
@@ -70,18 +86,20 @@ namespace CTCPSERVER {
     eErrorCode DataDealer::AddSocketItem(int nfd,SocketInfo * const npSocketInfo) throw(EpollExceptionCtlFailed&) {
         if(!mpEpollObject)
             return eInvalidObject;
+       // std::lock_guard<std::mutex> lock(mMutex);
         struct epoll_event ev;
         ev.events = EPOLLIN; //use the level triggered mode to monitor the reading event
         ev.data.ptr = npSocketInfo;
         return mpEpollObject->AddFileDescriptor(nfd,ev);
     }
+    
     //delete a socket from this dealer
     eErrorCode DataDealer::DeleteSoecktItem(int nfd) throw(EpollExceptionCtlFailed&) {
         if(!mpEpollObject)
             return eInvalidObject;
+        //std::lock_guard<std::mutex> lock(mMutex);
         struct epoll_event ev;
         return mpEpollObject->RemoveFileDescriptor(nfd,ev);
-
     }
 
 }

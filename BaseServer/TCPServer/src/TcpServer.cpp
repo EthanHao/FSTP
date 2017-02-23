@@ -12,13 +12,30 @@
  */
 
 #include "TcpServer.h"
+#include "DataDealerCenter.h"
+namespace CTCPSERVER {
 
-TcpServer::TcpServer() {
+    TcpServer::TcpServer(const std::string& nIP, int nPort,int nNumDealer,int nMaxSocketSizePerDealer)throw(SocketExceptionCreateFailed&,
+                SocketExceptionSetOptionFailed&,
+                SocketExceptionBindFailed&,
+                SocketExceptionListenFailed&,
+                EpollExceptionCreateFailed&,
+                EpollExceptionCtlFailed&,
+                std::bad_alloc&,
+                ThreadExceptionCreateFailed&) {
+        std::unique_ptr<IDataCenterInterface> lpCenter(new DataDealerCenter(nNumDealer,nMaxSocketSizePerDealer));
+        mpDataCenter = std::move(lpCenter);
+        std::unique_ptr<ConnectionListener> lpListener(new ConnectionListener(nIP,nPort,nNumDealer*nMaxSocketSizePerDealer,mpDataCenter.get()));
+        mpListener = std::move(lpListener);
+    }
+
+
+    
+    eErrorCode TcpServer::Stop(){
+        if(mpListener)
+            mpListener->StopAndWait();
+        if(mpDataCenter)
+            mpListener->StopAndWait();
+    }
+            
 }
-
-TcpServer::TcpServer(const TcpServer& orig) {
-}
-
-TcpServer::~TcpServer() {
-}
-

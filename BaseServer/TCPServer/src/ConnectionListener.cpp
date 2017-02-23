@@ -21,7 +21,7 @@
 #include <thread>
 namespace CTCPSERVER {
 
-    ConnectionListener::ConnectionListener(const std::string& nsIP, int nPort,int nMaxBacklogSize, std::shared_ptr<IDataCenterInterface> & npDataCenter) 
+    ConnectionListener::ConnectionListener(const std::string& nsIP, int nPort,int nMaxBacklogSize, IDataCenterInterface* npDataCenter) 
     throw(SocketExceptionCreateFailed&,
             SocketExceptionSetOptionFailed&,
             SocketExceptionBindFailed&,
@@ -55,15 +55,15 @@ namespace CTCPSERVER {
         memset(&addr, 0, sizeof(addr));
         addr.sin_family = AF_INET;
         addr.sin_port = ::htons(mnPort);
-        addr.sin_addr.s_addr = inet_addr(msIP.c_str());
+        addr.sin_addr.s_addr =  msIP.compare("*") == 0 ? INADDR_ANY :inet_addr(msIP.c_str());
         if( FAILED(::bind(mnListenFileDescriptor, 
                  reinterpret_cast<struct sockaddr *>(&addr),
                   sizeof(struct sockaddr))) )
-            throw new SocketExceptionBindFailed(errno);
+            throw new SocketExceptionBindFailed(errno,mnListenFileDescriptor);
         
         //Listen
         if( FAILED(::listen(mnListenFileDescriptor, nMaxBacklogSize)) )
-             throw SocketExceptionListenFailed(errno);
+             throw SocketExceptionListenFailed(errno,mnListenFileDescriptor);
         
         //Create EPoll Object
         //Add this file descriptor to this epoll object
@@ -88,58 +88,74 @@ namespace CTCPSERVER {
         StopAndWait();
     }
     
-    void ConnectionListener::TheadCallback(){
-        
-        while(mbRunning && mpEpollObject && mpEpollEvents)
-        {
-            try{
-            //Wait
-            int nfds =  mpEpollObject->Wait(&mpEpollEvents[0],mnMaxBacklogSize);
-            if(nfds == -1)
-            {
-                //Log the error and 
+    void ConnectionListener::TheadCallback() {
+
+        while (mbRunning && mpEpollObject && mpEpollEvents) {
+            try {
+                //Wait
+                int nfds = mpEpollObject->Wait(&mpEpollEvents[0], mnMaxBacklogSize);
+                //accept this client one by one
+                for (int i = 0; i < nfds; i++){
+                    try {
+                        Accept(&mpEpollEvents[i]);
+                    } catch (SocketExceptionAcceptFailed& e) {
+                        //Log the reason,Maybe it's the system call interruption
+                        //Continue to work
+                    } catch (SocketExceptionSetOptionFailed& e) {
+                        //Log the reason
+                        //Close this connection
+                        ::close(e.GetSocketHandle());
+                        
+                    } catch (EpollExceptionCtlFailed& e) {
+                        //dispatch this socket failed
+                        //we need to clear up everything about this socket handle
+                        if(mpDataCenter != nullptr)
+                             mpDataCenter->FreeSocketInfo(e.GetSocketHandle());
+                        //Close this connection
+                        ::close(e.GetSocketHandle());
+                    } catch (std::exception& e) {
+                        //Log the reason
+                        //Continue to work
+                    }
+                }
+            } catch (EpollExceptionWaitFailed& e) {
+               
+                //If it is system call interrupt then continue
+                if(e.GetErrorNo() == EINTR)
+                    continue;
+                
+                //Else Exit this thread,
+                //Log the reason to exit the thread
                 mbRunning = false;
                 break;
-            }
-            
-            //accept this client one by one
-            for(int i = 0; i < nfds ; i++)
-                Accept(&mpEpollEvents[i]);
-            }
-            catch(SocketExceptionAcceptFailed& e){
+            } catch (std::exception& e) {
                 //Log the reason
-            }
-            catch(SocketExceptionSetOptionFailed& e){
-                //Log the reason
-            }
-            catch(EpollExceptionWaitFailed& e){
-                //Exit this thread,
-                //Log the reason to exit the thread
-            }
-            catch(std::exception& e){
-                //Log the reason
+                //Continue
             }
         }
     }
-    void ConnectionListener::Accept(epoll_event * npEvent) throw(SocketExceptionAcceptFailed&,SocketExceptionSetOptionFailed&){
+
+    void ConnectionListener::Accept(epoll_event * npEvent) throw (SocketExceptionAcceptFailed&,
+            SocketExceptionSetOptionFailed&,
+            EpollExceptionCtlFailed&) {
         //accept
         //set nonblock io 
-        if(npEvent == nullptr)
+        if (npEvent == nullptr)
             return;
-        
+
         //accept
         struct sockaddr_in lAddressIn;
         unsigned int lnAddressLength = sizeof(struct sockaddr_in);
         int lnNewFileDescriptor = ::accept(mnListenFileDescriptor, reinterpret_cast<struct sockaddr *>(&lAddressIn),&lnAddressLength);
         if(lnNewFileDescriptor)
-            throw SocketExceptionAcceptFailed(errno);
+            throw SocketExceptionAcceptFailed(errno,mnListenFileDescriptor);
         //set NON_BLOCKIO, Linger,NoDelay
         SocketInfo::SetLinger(lnNewFileDescriptor);
         SocketInfo::SetNoDelay(lnNewFileDescriptor);
         SocketInfo::SetNonBlock(lnNewFileDescriptor);
         
         //add to dataDealerCenter to handle reading and writing on this socket
-        if(mpDataCenter)
+        if(mpDataCenter != nullptr)
             mpDataCenter->DispatchSocket(lnNewFileDescriptor);
     }
     eErrorCode ConnectionListener::Run() throw(ThreadExceptionCreateFailed&)

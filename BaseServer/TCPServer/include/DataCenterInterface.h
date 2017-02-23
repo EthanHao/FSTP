@@ -21,7 +21,8 @@ namespace CTCPSERVER {
         //Add a Socket File Descriptor to deal with its reading or writing operation
         virtual eErrorCode DispatchSocket(int nfd)  throw(EpollExceptionCtlFailed&) = 0;
    
-        
+        //Free the resource associated with the socket descriptor
+        virtual eErrorCode FreeSocketInfo(int nfd) = 0;
     };
 }
 

@@ -18,6 +18,7 @@
 #include "SocketInfo.h"
 #include <vector>
 #include <map>
+#include <mutex>
 #include "MemoryPool.h"
 #include "DataCenterInterface.h"
 //Create a bunch of Dealers 
@@ -27,20 +28,26 @@ namespace CTCPSERVER {
 
     class DataDealerCenter : public IDataCenterInterface{
     public:
-        DataDealerCenter(int nNum,int nMaxSocketSize)throw (EpollExceptionCreateFailed&,
+        DataDealerCenter(int nNum,int nMaxSocketSizePerDealer)throw (EpollExceptionCreateFailed&,
                 std::bad_alloc&,
                 ThreadExceptionCreateFailed&);
         DataDealerCenter(const DataDealerCenter& orig) = delete;
-        virtual ~DataDealerCenter();
+        virtual ~DataDealerCenter() = default;
         
         //Add a Socket File Descriptor to deal with its reading or writing operation
         virtual eErrorCode DispatchSocket(int nfd) throw(EpollExceptionCtlFailed&);
+       //Free the resource associated with the socket descriptor
+        virtual eErrorCode FreeSocketInfo(int nfd);
+        //Stop the dealer
+        eErrorCode StopDealers();
     private:
+
         const int mnNumOfDealers;
         const int mnMaxSocketSizePerDealer;
         std::unique_ptr<MemoryPool<SocketInfo>> mpMemoryPool;
         std::map<int,SocketInfo*> mMapSocket;
         std::vector<std::unique_ptr<DataDealer>> mpDealers;
+        std::mutex mMutex;
         
     };
 }

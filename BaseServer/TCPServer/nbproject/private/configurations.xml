@@ -44,12 +44,14 @@ Contributor(s):
       <df name="include">
         <in>CommonMacro.h</in>
         <in>ConnectionListener.h</in>
+        <in>DataCenterInterface.h</in>
         <in>DataDealer.h</in>
         <in>DataDealerCenter.h</in>
         <in>EPollObject.h</in>
         <in>ErrorCode.h</in>
         <in>Exception.h</in>
         <in>IServer.h</in>
+        <in>MemoryPool.h</in>
         <in>SocketInfo.h</in>
         <in>TcpServer.h</in>
       </df>

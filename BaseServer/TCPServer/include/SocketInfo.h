@@ -35,7 +35,7 @@ namespace CTCPSERVER {
         static void SetNonBlock(int nfd)throw (SocketExceptionSetOptionFailed&) {
             int oldFcntl = ::fcntl(nfd, F_GETFD, 0);
             if (FAILED(::fcntl(nfd, F_SETFL, oldFcntl | O_NONBLOCK))) {
-                  throw  SocketExceptionSetOptionFailed(errno);
+                  throw  SocketExceptionSetOptionFailed(errno,nfd);
             }
            
         }
@@ -50,7 +50,7 @@ namespace CTCPSERVER {
             socklen_t optLength = sizeof (flag);
             if (::setsockopt(nfd, IPPROTO_TCP, TCP_NODELAY,
                     reinterpret_cast<char*> (&flag), optLength) < 0) {
-                throw  SocketExceptionSetOptionFailed(errno);
+                throw  SocketExceptionSetOptionFailed(errno,nfd);
             }
 
         }
@@ -63,7 +63,7 @@ namespace CTCPSERVER {
             myLinger.l_linger = 5;
             if (FAILED(::setsockopt(nfd, SOL_SOCKET, SO_LINGER,
                     reinterpret_cast<char*> (&myLinger), sizeof (linger)) ) ) {
-                throw SocketExceptionSetOptionFailed(errno);
+                throw SocketExceptionSetOptionFailed(errno,nfd);
             }
         }
         
@@ -73,7 +73,7 @@ namespace CTCPSERVER {
             int opt = 1;
             int nRet = ::setsockopt(nfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof (opt));
             if (FAILED(nRet))
-                throw SocketExceptionSetOptionFailed(errno);
+                throw SocketExceptionSetOptionFailed(errno,nfd);
         }
     private:
 

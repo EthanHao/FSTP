@@ -36,6 +36,7 @@ namespace CTCPSERVER {
                 ThreadExceptionCreateFailed&,
                 LogicalExceptionTooManyBackendServer&,
                 LogicalExceptionNoBackendServer&);
+        
         TcpServer(const TcpServer& orig) = delete;
         virtual ~TcpServer() = default;
       

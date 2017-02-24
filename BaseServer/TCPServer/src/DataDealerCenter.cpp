@@ -18,7 +18,12 @@ namespace CTCPSERVER {
                 std::bad_alloc&,
                 ThreadExceptionCreateFailed&,
                 LogicalExceptionTooManyBackendServer&,
-                LogicalExceptionNoBackendServer&):
+                LogicalExceptionNoBackendServer&,
+                SocketExceptionCreateFailed&,
+                SocketExceptionP2NWrongFormat&,
+                SocketExceptionP2NFailed&,
+                SocketExceptionConnectFailed&,
+                SocketExceptionSetOptionFailed&):
                     mnNumOfDealers(nNum),
                     mnMaxSocketSizePerDealer(nMaxSocketSizePerDealer){
         

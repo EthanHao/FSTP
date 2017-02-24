@@ -64,6 +64,16 @@ Contributor(s):
         <in>welcome.cc</in>
       </df>
     </df>
+    <df root="." name="1">
+    </df>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>CMakeLists.txt</itemPath>
+      <itemPath>build/Debug/Makefile</itemPath>
+      <itemPath>build/Release/Makefile</itemPath>
+    </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
                    projectFiles="false"
@@ -76,6 +86,7 @@ Contributor(s):
   <sourceFolderFilter>^(nbproject|build)$</sourceFolderFilter>
   <sourceRootList>
     <Elem>.</Elem>
+    <Elem>.</Elem>
   </sourceRootList>
   <projectmakefile>build/Debug/Makefile</projectmakefile>
   <confs>
@@ -87,8 +98,10 @@ Contributor(s):
       </toolsSet>
       <flagsDictionary>
         <element flagsID="0"
+                 commonFlags="-mtune=generic -march=x86-64 -fstack-protector-strong"/>
+        <element flagsID="1"
                  commonFlags="-mtune=generic -march=x86-64 -std=c++11 -fstack-protector-strong"/>
-        <element flagsID="1" commonFlags="-std=c++11"/>
+        <element flagsID="2" commonFlags="-std=c++11"/>
       </flagsDictionary>
       <codeAssistance>
       </codeAssistance>
@@ -106,7 +119,7 @@ Contributor(s):
         </preBuild>
       </makefileType>
       <item path="src/ConnectionListener.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="0">
+        <ccTool flags="1">
           <incDir>
             <pElem>include</pElem>
             <pElem>src</pElem>
@@ -118,13 +131,13 @@ Contributor(s):
         <ccTool flags="1">
           <incDir>
             <pElem>include</pElem>
-            <pElem>../Common/Clog/include</pElem>
+            <pElem>src</pElem>
             <pElem>build/Debug</pElem>
           </incDir>
         </ccTool>
       </item>
       <item path="src/DataDealerCenter.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
+        <ccTool flags="2">
           <incDir>
             <pElem>include</pElem>
             <pElem>../Common/Clog/include</pElem>
@@ -133,7 +146,7 @@ Contributor(s):
         </ccTool>
       </item>
       <item path="src/EPollObject.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="0">
+        <ccTool flags="1">
           <incDir>
             <pElem>include</pElem>
             <pElem>src</pElem>
@@ -142,7 +155,7 @@ Contributor(s):
         </ccTool>
       </item>
       <item path="src/SocketInfo.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="0">
+        <ccTool flags="1">
           <incDir>
             <pElem>src</pElem>
             <pElem>include</pElem>
@@ -151,7 +164,7 @@ Contributor(s):
         </ccTool>
       </item>
       <item path="src/TcpServer.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
+        <ccTool flags="2">
           <incDir>
             <pElem>include</pElem>
             <pElem>../Common/Clog/include</pElem>

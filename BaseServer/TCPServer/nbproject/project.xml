@@ -49,9 +49,11 @@ Contributor(s):
             <sourceEncoding>UTF-8</sourceEncoding>
             <sourceRootList>
                 <sourceRootElem>.</sourceRootElem>
+                <sourceRootElem>.</sourceRootElem>
             </sourceRootList>
             <make-dep-projects/>
             <sourceRootList>
+                <sourceRootElem>.</sourceRootElem>
                 <sourceRootElem>.</sourceRootElem>
             </sourceRootList>
             <confList>

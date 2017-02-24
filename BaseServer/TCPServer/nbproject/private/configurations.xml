@@ -66,6 +66,12 @@ Contributor(s):
         <in>welcome.cc</in>
       </df>
     </df>
+    <df root="." name="1">
+      <df name="include">
+      </df>
+      <df name="src">
+      </df>
+    </df>
   </logicalFolder>
   <projectmakefile>build/Debug/Makefile</projectmakefile>
   <confs>

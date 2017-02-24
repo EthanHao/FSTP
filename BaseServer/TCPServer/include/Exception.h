@@ -76,7 +76,13 @@ namespace CTCPSERVER {
         }
 
     };
-    
+    class EpollExceptionEventFailed : public EpollException {
+    public:
+        EpollExceptionEventFailed(const int nErrorNo,const int nEpollHandle = 0,const int nSocketHandle = 0) : 
+            EpollException(nErrorNo,nEpollHandle,nSocketHandle) {
+        }
+
+    };
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Socket Exception
     ////////////////////
@@ -121,9 +127,34 @@ namespace CTCPSERVER {
         SocketExceptionListenFailed(const int nErrorNo,const int nSocketHandle = 0) : SocketException(nErrorNo,nSocketHandle){
         }
     };
-     class SocketExceptionAcceptFailed : public SocketException {
+    class SocketExceptionAcceptFailed : public SocketException {
     public:
         SocketExceptionAcceptFailed(const int nErrorNo,const int nSocketHandle = 0) : SocketException(nErrorNo,nSocketHandle) {
+        }
+    };
+    class SocketExceptionP2NFailed : public SocketException {
+    public:
+        SocketExceptionP2NFailed(const int nErrorNo,const int nSocketHandle = 0) : SocketException(nErrorNo,nSocketHandle) {
+        }
+    };
+    class SocketExceptionP2NWrongFormat : public SocketException {
+    public:
+        SocketExceptionP2NWrongFormat(const int nErrorNo,const int nSocketHandle = 0) : SocketException(nErrorNo,nSocketHandle) {
+        }
+    };
+    class SocketExceptionH2SFailed : public SocketException {
+    public:
+        SocketExceptionH2SFailed(const int nErrorNo,const int nSocketHandle = 0) : SocketException(nErrorNo,nSocketHandle) {
+        }
+    };
+    class SocketExceptionConnectFailed : public SocketException {
+    public:
+        SocketExceptionConnectFailed(const int nErrorNo,const int nSocketHandle = 0) : SocketException(nErrorNo,nSocketHandle) {
+        }
+    };
+    class SocketExceptionInvalidDescriptor : public SocketException {
+    public:
+        SocketExceptionInvalidDescriptor(const int nErrorNo,const int nSocketHandle = 0) : SocketException(nErrorNo,nSocketHandle) {
         }
     };
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -32,7 +32,12 @@ namespace CTCPSERVER {
                 std::bad_alloc&,
                 ThreadExceptionCreateFailed&,
                 LogicalExceptionTooManyBackendServer&,
-                LogicalExceptionNoBackendServer&);
+                LogicalExceptionNoBackendServer&,
+                SocketExceptionCreateFailed&,
+                SocketExceptionP2NWrongFormat&,
+                SocketExceptionP2NFailed&,
+                SocketExceptionConnectFailed&,
+                SocketExceptionSetOptionFailed&);
         DataDealerCenter(const DataDealerCenter& orig) = delete;
         virtual ~DataDealerCenter() = default;
         

@@ -26,23 +26,32 @@ namespace CTCPSERVER {
 
     class DataDealer {
     public:
-        DataDealer(int nNum,const ServerInfo& nBackendServer ) throw (EpollExceptionCreateFailed&,
+        DataDealer(int nNum, const ServerInfo& nBackendServer) throw (EpollExceptionCreateFailed&,
                 std::bad_alloc&,
-                ThreadExceptionCreateFailed&);
+                ThreadExceptionCreateFailed&,
+                SocketExceptionCreateFailed&,
+                SocketExceptionP2NWrongFormat&,
+                SocketExceptionP2NFailed&,
+                SocketExceptionConnectFailed&,
+                SocketExceptionSetOptionFailed&);
         DataDealer(const DataDealer& orig) = delete;
         virtual ~DataDealer();
-        
+
         //Connect to the backend Server
-        eErrorCode Connect();
-        
+        eErrorCode Connect()throw (SocketExceptionCreateFailed&,
+                SocketExceptionP2NWrongFormat&,
+                SocketExceptionP2NFailed&,
+                SocketExceptionConnectFailed&,
+                SocketExceptionSetOptionFailed&);
+
         //Run this Dealer in his own thread
-        eErrorCode Run()  throw(ThreadExceptionCreateFailed&);
+        eErrorCode Run() throw (ThreadExceptionCreateFailed&);
         //the callback function of thread
         void TheadCallback();
-        
-       //Stop Data Reading and Writing , means stopping the thread
+
+        //Stop Data Reading and Writing , means stopping the thread
         inline bool Stop() {
-            if(mbRunning == false || !mThread.joinable()) 
+            if (mbRunning == false || !mThread.joinable())
                 return false;
             mbRunning = false;
             return true;
@@ -61,7 +70,7 @@ namespace CTCPSERVER {
         eErrorCode DeleteSoecktItem(int nfd) throw(EpollExceptionCtlFailed&);
         
         //Data things
-        eErrorCode DataReadAndWritting();
+        eErrorCode DataReadAndWritting(const struct epoll_event& npEvent);
     private:
         const int mnMaxNumOfSocket;
         //std::mutex mMutex;

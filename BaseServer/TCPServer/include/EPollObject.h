@@ -40,6 +40,9 @@ namespace CTCPSERVER {
         //or there is something happened on this file handles.
         int Wait(struct epoll_event* events, int nMaxEvent, int nTimeOut = -1)
          throw(EpollExceptionWaitFailed&);
+        
+        //GetID
+        int GetEpollID() {return mnEpollID;}
     private:
         int mnMaxSize;
         int mnEpollID;

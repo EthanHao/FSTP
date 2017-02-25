@@ -19,13 +19,13 @@
 #include <atomic>
 #include "Exception.h"
 #include <thread>
-#include "DataCenterInterface.h"
+#include "ReactorCenterInterface.h"
 
 namespace CTCPSERVER {
 
     class ConnectionListener {
     public:
-        ConnectionListener(const std::string& nIP, int nPort,int nMaxBacklogSize,IDataCenterInterface* npDataCenter)
+        ConnectionListener(const std::string& nIP, int nPort,int nMaxBacklogSize,IReactorCenterInterface* npDataCenter)
                 throw(SocketExceptionCreateFailed&,
                 SocketExceptionSetOptionFailed&,
                 SocketExceptionBindFailed&,
@@ -76,7 +76,7 @@ namespace CTCPSERVER {
         std::atomic<bool> mbRunning;
         
         //The pointer to the dataCenter
-        IDataCenterInterface* mpDataCenter;
+        IReactorCenterInterface* mpReactorCenter;
     };
 }
 #endif /* CONNECTIONLISTER_H */

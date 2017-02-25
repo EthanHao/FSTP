@@ -15,7 +15,7 @@
 #define TCPSERVER_H
 
 #include "ConnectionListener.h"
-#include "DataCenterInterface.h"
+#include "ReactorCenterInterface.h"
 #include "ServerInfo.h"
 #include <vector>
 namespace CTCPSERVER {
@@ -25,8 +25,7 @@ namespace CTCPSERVER {
 
     class TcpServer {
     public:
-        TcpServer(const std::string& nIP, int nPort,int nNumDealer,int nMaxSocketSizePerDealer,const std::vector<ServerInfo> & nBackServers)
-                 throw(SocketExceptionCreateFailed&,
+        TcpServer(const std::string& nIP, int nPort,int nNumDealer,int nMaxSocketSizePerReactor,int nNumOfWorkerPerReactor,const std::vector<ServerInfo> & nBackServers)throw(SocketExceptionCreateFailed&,
                 SocketExceptionSetOptionFailed&,
                 SocketExceptionBindFailed&,
                 SocketExceptionListenFailed&,
@@ -35,7 +34,7 @@ namespace CTCPSERVER {
                 std::bad_alloc&,
                 ThreadExceptionCreateFailed&,
                 LogicalExceptionTooManyBackendServer&,
-                LogicalExceptionNoBackendServer&);
+                LogicalExceptionNoBackendServer&) ;
         
         TcpServer(const TcpServer& orig) = delete;
         virtual ~TcpServer() = default;
@@ -43,7 +42,7 @@ namespace CTCPSERVER {
         eErrorCode Stop();
     private:
         std::unique_ptr<ConnectionListener> mpListener;
-        std::unique_ptr<IDataCenterInterface> mpDataCenter;
+        std::unique_ptr<IReactorCenterInterface> mpReactorCenter;
     };
 }
 #endif /* TCPSERVER_H */

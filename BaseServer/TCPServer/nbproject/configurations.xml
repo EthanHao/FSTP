@@ -44,21 +44,21 @@ Contributor(s):
       <df name="include">
         <in>CommonMacro.h</in>
         <in>ConnectionListener.h</in>
-        <in>DataDealer.h</in>
-        <in>DataDealerCenter.h</in>
         <in>EPollObject.h</in>
         <in>ErrorCode.h</in>
         <in>Exception.h</in>
         <in>IServer.h</in>
+        <in>Reactor.h</in>
+        <in>ReactorCenter.h</in>
         <in>ServerInfo.h</in>
         <in>SocketInfo.h</in>
         <in>TcpServer.h</in>
       </df>
       <df name="src">
         <in>ConnectionListener.cpp</in>
-        <in>DataDealer.cpp</in>
-        <in>DataDealerCenter.cpp</in>
         <in>EPollObject.cpp</in>
+        <in>Reactor.cpp</in>
+        <in>ReactorCenter.cpp</in>
         <in>SocketInfo.cpp</in>
         <in>TcpServer.cpp</in>
         <in>welcome.cc</in>
@@ -127,7 +127,7 @@ Contributor(s):
           </incDir>
         </ccTool>
       </item>
-      <item path="src/DataDealer.cpp" ex="false" tool="1" flavor2="8">
+      <item path="src/EPollObject.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="1">
           <incDir>
             <pElem>include</pElem>
@@ -136,7 +136,7 @@ Contributor(s):
           </incDir>
         </ccTool>
       </item>
-      <item path="src/DataDealerCenter.cpp" ex="false" tool="1" flavor2="8">
+      <item path="src/Reactor.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="2">
           <incDir>
             <pElem>include</pElem>
@@ -145,11 +145,11 @@ Contributor(s):
           </incDir>
         </ccTool>
       </item>
-      <item path="src/EPollObject.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
+      <item path="src/ReactorCenter.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="2">
           <incDir>
             <pElem>include</pElem>
-            <pElem>src</pElem>
+            <pElem>../Common/Clog/include</pElem>
             <pElem>build/Debug</pElem>
           </incDir>
         </ccTool>
@@ -217,10 +217,6 @@ Contributor(s):
       </item>
       <item path="include/ConnectionListener.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/DataDealer.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/DataDealerCenter.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="include/EPollObject.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/ErrorCode.h" ex="false" tool="3" flavor2="0">
@@ -229,19 +225,25 @@ Contributor(s):
       </item>
       <item path="include/IServer.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/Reactor.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/ReactorCenter.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/ServerInfo.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/SocketInfo.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/TcpServer.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/ThreadPool.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/ConnectionListener.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="src/DataDealer.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/DataDealerCenter.cpp" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="src/EPollObject.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Reactor.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ReactorCenter.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/SocketInfo.cpp" ex="false" tool="1" flavor2="0">
       </item>

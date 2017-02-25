@@ -185,11 +185,11 @@ namespace CTCPSERVER {
     
     ////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //Thread Exception
+    //Logical Exception
     class LogicalException : public std::exception {
     public:
 
-        LogicalException(const int& nErrorNo,const int& nParam1) : _errorno(nErrorNo),_param1(nParam1) {
+        LogicalException(const int& nErrorNo,const int& nSocketHandle) : _errorno(nErrorNo),_socketHandle(nSocketHandle) {
         }
 
         const char* what() const throw () {
@@ -198,20 +198,28 @@ namespace CTCPSERVER {
         const int GetErrorNo() {
             return _errorno;
         }
+        const int GetSocketHandle() {
+            return _socketHandle;
+        }
     private:
         const int _errorno;
-        const int _param1;
+        const int _socketHandle;
 
     };
     
     class LogicalExceptionTooManyBackendServer : public LogicalException {
     public:
-        LogicalExceptionTooManyBackendServer(const int& nErrorNo,const int& nParam = 0) : LogicalException(nErrorNo,nParam) {
+        LogicalExceptionTooManyBackendServer(const int& nErrorNo,const int& SocketHandle = 0) : LogicalException(nErrorNo,SocketHandle) {
         }
     };
     class LogicalExceptionNoBackendServer : public LogicalException {
     public:
-        LogicalExceptionNoBackendServer(const int& nErrorNo,const int& nParam = 0) : LogicalException(nErrorNo,nParam) {
+        LogicalExceptionNoBackendServer(const int& nErrorNo,const int& SocketHandle = 0) : LogicalException(nErrorNo,SocketHandle) {
+        }
+    };
+     class LogicalExceptionNoEmptyRoonInMemoryPool : public LogicalException {
+    public:
+        LogicalExceptionNoEmptyRoonInMemoryPool(const int& nErrorNo,const int& SocketHandle = 0) : LogicalException(nErrorNo,SocketHandle) {
         }
     };
 }

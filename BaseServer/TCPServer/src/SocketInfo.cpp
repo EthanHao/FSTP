@@ -14,12 +14,14 @@
 #include "SocketInfo.h"
 namespace CTCPSERVER {
 
-    SocketInfo::SocketInfo() {
+   
+    SocketInfo::SocketInfo(){
+        mnSocketHandle = 0;
+        mnReadLen = 0;
+        mnUnwrittenLen = 0;
+    }
+    void SocketInfo::Set(int nSocket){
+        return;
     }
 
-    SocketInfo::SocketInfo(const SocketInfo& orig) {
-    }
-
-    SocketInfo::~SocketInfo() {
-    }
 }

@@ -5,7 +5,7 @@
  */
 
 /* 
- * File:   DataDealerCenter.h
+ * File:   ReactorCenter.h
  * Author: ethan
  *
  * Created on February 14, 2017, 7:34 PM
@@ -14,21 +14,21 @@
 #ifndef DATADEALERCENTER_H
 #define DATADEALERCENTER_H
 #include "ErrorCode.h"
-#include "DataDealer.h"
+#include "Reactor.h"
 #include "SocketInfo.h"
 #include <vector>
 #include <map>
 #include <mutex>
 #include "MemoryPool.h"
-#include "DataCenterInterface.h"
+#include "ReactorCenterInterface.h"
 //Create a bunch of Dealers 
 //Dispatch socket to a specified dealer
 //for simplicity this class could be singleton 
 namespace CTCPSERVER {
 
-    class DataDealerCenter : public IDataCenterInterface{
+    class ReactorCenter : public IReactorCenterInterface{
     public:
-        DataDealerCenter(int nNum,int nMaxSocketSizePerDealer,const std::vector<ServerInfo> & nBackServers)throw (EpollExceptionCreateFailed&,
+        ReactorCenter(int nNum,int nMaxSocketSizePerReactor,int nNumOfWorks,const std::vector<ServerInfo> & nBackServers)throw (EpollExceptionCreateFailed&,
                 std::bad_alloc&,
                 ThreadExceptionCreateFailed&,
                 LogicalExceptionTooManyBackendServer&,
@@ -38,22 +38,21 @@ namespace CTCPSERVER {
                 SocketExceptionP2NFailed&,
                 SocketExceptionConnectFailed&,
                 SocketExceptionSetOptionFailed&);
-        DataDealerCenter(const DataDealerCenter& orig) = delete;
-        virtual ~DataDealerCenter() = default;
+        ReactorCenter(const ReactorCenter& orig) = delete;
+        virtual ~ReactorCenter() = default;
         
         //Add a Socket File Descriptor to deal with its reading or writing operation
-        virtual eErrorCode DispatchSocket(int nfd) throw(EpollExceptionCtlFailed&);
-       //Free the resource associated with the socket descriptor
-        virtual eErrorCode FreeSocketInfo(int nfd);
+        virtual eErrorCode DispatchSocket(int nfd) 
+            throw(LogicalExceptionNoEmptyRoonInMemoryPool&,EpollExceptionCtlFailed&);
+       
         //Stop the dealer
         eErrorCode StopDealers();
     private:
 
-        const int mnNumOfDealers;
-        const int mnMaxSocketSizePerDealer;
-        std::unique_ptr<MemoryPool<SocketInfo>> mpMemoryPool;
-        std::map<int,SocketInfo*> mMapSocket;
-        std::vector<std::unique_ptr<DataDealer>> mpDealers;
+        const int mnNumOfReactors;
+        const int mnMaxSocketSizePerReactor;
+     
+        std::vector<std::unique_ptr<Reactor>> mpReactors;
         std::mutex mMutex;
         
     };

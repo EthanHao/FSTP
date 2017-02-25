@@ -13,7 +13,7 @@
 
 #ifndef MEMORYPOOL_H
 #define MEMORYPOOL_H
-#include <bitset>
+#include <vector>
 #include <memory>
 namespace CTCPSERVER {
     template <typename T > class MemoryPool {
@@ -21,6 +21,7 @@ namespace CTCPSERVER {
             MemoryPool(int nSize) throw (std::bad_alloc&) : mnSize(nSize){
                 std::unique_ptr<T[]> lp (new T[mnSize]);
                 mArrayBuffer = std::move(lp);
+                mnFreeSize = mnSize;
                 for(int i = 0; i < mnSize ; i++)
                     mBitSet.push_back(false);
                     
@@ -34,6 +35,7 @@ namespace CTCPSERVER {
                 {
                     if(mBitSet[i] == false)
                     {
+                        mnFreeSize--;
                         mBitSet[i] = true;
                         return &mArrayBuffer[i]; 
                     }
@@ -47,10 +49,13 @@ namespace CTCPSERVER {
                         ( np >= &mArrayBuffer[0] && np <= &mArrayBuffer[mnSize-1]) ){
                     int offset = (np- &mArrayBuffer[0]) % sizeof(T);
                     mBitSet[offset] = false;
+                    mnFreeSize++;
                 } 
             }
+            int GetFreeSize() {return mnFreeSize;}
         private:
             const int mnSize;
+            int mnFreeSize;
             std::vector<bool> mBitSet;
             std::unique_ptr<T[]> mArrayBuffer;
                    

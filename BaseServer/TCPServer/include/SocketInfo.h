@@ -26,11 +26,12 @@ namespace CTCPSERVER {
 //like we can assign an unique name for this socket
 //the ip address, port, receive buffer, send buffer etc these informations directly related to a socket
 
-    class SocketInfo {
+  
+    class SocketInfo{
     public:
         SocketInfo();
-        SocketInfo(const SocketInfo& orig);
-        virtual ~SocketInfo();
+        SocketInfo(const SocketInfo& orig) = delete;
+        virtual ~SocketInfo() = default;
 
         static void SetNonBlock(int nfd)throw (SocketExceptionSetOptionFailed&) {
             int oldFcntl = ::fcntl(nfd, F_GETFD, 0);
@@ -75,7 +76,20 @@ namespace CTCPSERVER {
             if (FAILED(nRet))
                 throw SocketExceptionSetOptionFailed(errno,nfd);
         }
+        
+    public:
+        void Set(int nSocket);
+        
     private:
+        int mnSocketHandle;
+        int mnSizeOfKernalReadBuffer;
+        int mnSizeOfKernalWriteBuffer;
+        long mLastActiveTime;
+        
+        char mReadBuffer[4096];
+        int  mnReadLen;
+        char mUnwrittenBuffer[4096];
+        int mnUnwrittenLen;
 
     };
 }

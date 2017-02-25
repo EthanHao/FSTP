@@ -12,10 +12,10 @@
  */
 
 #include "TcpServer.h"
-#include "DataDealerCenter.h"
+#include "ReactorCenter.h"
 namespace CTCPSERVER {
 
-    TcpServer::TcpServer(const std::string& nIP, int nPort,int nNumDealer,int nMaxSocketSizePerDealer,const std::vector<ServerInfo> & nBackServers)throw(SocketExceptionCreateFailed&,
+    TcpServer::TcpServer(const std::string& nIP, int nPort,int nNumDealer,int nMaxSocketSizePerReactor,int nNumOfWorkerPerReactor,const std::vector<ServerInfo> & nBackServers)throw(SocketExceptionCreateFailed&,
                 SocketExceptionSetOptionFailed&,
                 SocketExceptionBindFailed&,
                 SocketExceptionListenFailed&,
@@ -26,10 +26,10 @@ namespace CTCPSERVER {
                 LogicalExceptionTooManyBackendServer&,
                 LogicalExceptionNoBackendServer&) {
         
-        std::unique_ptr<IDataCenterInterface> lpCenter(new DataDealerCenter(nNumDealer,nMaxSocketSizePerDealer,nBackServers));
-        mpDataCenter = std::move(lpCenter);
+        std::unique_ptr<IReactorCenterInterface> lpCenter(new ReactorCenter(nNumDealer,nMaxSocketSizePerReactor,nNumOfWorkerPerReactor,nBackServers));
+        mpReactorCenter = std::move(lpCenter);
         
-        std::unique_ptr<ConnectionListener> lpListener(new ConnectionListener(nIP,nPort,nNumDealer*nMaxSocketSizePerDealer,mpDataCenter.get()));
+        std::unique_ptr<ConnectionListener> lpListener(new ConnectionListener(nIP,nPort,nNumDealer*nMaxSocketSizePerReactor,mpReactorCenter.get()));
         mpListener = std::move(lpListener);
     }
 
@@ -38,7 +38,7 @@ namespace CTCPSERVER {
     eErrorCode TcpServer::Stop(){
         if(mpListener)
             mpListener->StopAndWait();
-        if(mpDataCenter)
+        if(mpReactorCenter)
             mpListener->StopAndWait();
     }
             

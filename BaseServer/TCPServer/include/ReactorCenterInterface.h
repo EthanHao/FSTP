@@ -16,13 +16,12 @@
 
 namespace CTCPSERVER {
 
-    class IDataCenterInterface {
+    class IReactorCenterInterface {
     public:
         //Add a Socket File Descriptor to deal with its reading or writing operation
-        virtual eErrorCode DispatchSocket(int nfd)  throw(EpollExceptionCtlFailed&) = 0;
+        virtual eErrorCode DispatchSocket(int nfd) 
+        throw(LogicalExceptionNoEmptyRoonInMemoryPool&,EpollExceptionCtlFailed&) = 0;
    
-        //Free the resource associated with the socket descriptor
-        virtual eErrorCode FreeSocketInfo(int nfd) = 0;
     };
 }
 

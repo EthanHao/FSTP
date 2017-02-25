@@ -21,7 +21,7 @@
 #include <thread>
 namespace CTCPSERVER {
 
-    ConnectionListener::ConnectionListener(const std::string& nsIP, int nPort,int nMaxBacklogSize, IDataCenterInterface* npDataCenter) 
+    ConnectionListener::ConnectionListener(const std::string& nsIP, int nPort,int nMaxBacklogSize, IReactorCenterInterface* npDataCenter) 
     throw(SocketExceptionCreateFailed&,
             SocketExceptionSetOptionFailed&,
             SocketExceptionBindFailed&,
@@ -35,7 +35,7 @@ namespace CTCPSERVER {
              mnMaxBacklogSize(nMaxBacklogSize),
              mpEpollObject(nullptr),
              mpEpollEvents(nullptr),
-             mpDataCenter(npDataCenter){
+             mpReactorCenter(npDataCenter){
         
         //Create a socket file descriptor binding to the ip ,address,
         //Create a EpollObject with the maxBackupsize
@@ -105,12 +105,14 @@ namespace CTCPSERVER {
                         //Log the reason
                         //Close this connection
                         ::close(e.GetSocketHandle());
-                        
-                    } catch (EpollExceptionCtlFailed& e) {
+                    } 
+                    catch (LogicalExceptionNoEmptyRoonInMemoryPool& e){
                         //dispatch this socket failed
-                        //we need to clear up everything about this socket handle
-                        if(mpDataCenter != nullptr)
-                             mpDataCenter->FreeSocketInfo(e.GetSocketHandle());
+                        //Close this connection
+                        ::close(e.GetSocketHandle());
+                    }
+                    catch (EpollExceptionCtlFailed& e) {
+                        //dispatch this socket failed
                         //Close this connection
                         ::close(e.GetSocketHandle());
                     } catch (std::exception& e) {
@@ -155,8 +157,8 @@ namespace CTCPSERVER {
         SocketInfo::SetNonBlock(lnNewFileDescriptor);
         
         //add to dataDealerCenter to handle reading and writing on this socket
-        if(mpDataCenter != nullptr)
-            mpDataCenter->DispatchSocket(lnNewFileDescriptor);
+        if(mpReactorCenter != nullptr)
+            mpReactorCenter->DispatchSocket(lnNewFileDescriptor);
     }
     eErrorCode ConnectionListener::Run() throw(ThreadExceptionCreateFailed&)
     {

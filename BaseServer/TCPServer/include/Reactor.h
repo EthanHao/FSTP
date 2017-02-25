@@ -5,7 +5,7 @@
  */
 
 /* 
- * File:   DataDealer.h
+ * File:   Reactor.h
  * Author: ethan
  *
  * Created on February 14, 2017, 7:36 PM
@@ -16,27 +16,30 @@
 
 #include "ErrorCode.h"
 #include "EPollObject.h"
+#include "MemoryPool.h"
 #include <memory>
+#include <mutex>
 #include <atomic>
+#include <map>
 #include "Exception.h"
 #include <thread>
 #include "SocketInfo.h"
 #include "ServerInfo.h"
+#include "ThreadPool.h"
+#include "Event.h"
 namespace CTCPSERVER {
 
-    class DataDealer {
+    class Reactor {
     public:
-        DataDealer(int nNum, const ServerInfo& nBackendServer) throw (EpollExceptionCreateFailed&,
+        Reactor(int nMaxNumOfSocket,int nNumOfWorkers) throw (EpollExceptionCreateFailed&,
                 std::bad_alloc&,
-                ThreadExceptionCreateFailed&,
-                SocketExceptionCreateFailed&,
-                SocketExceptionP2NWrongFormat&,
-                SocketExceptionP2NFailed&,
-                SocketExceptionConnectFailed&,
-                SocketExceptionSetOptionFailed&);
-        DataDealer(const DataDealer& orig) = delete;
-        virtual ~DataDealer();
+                ThreadExceptionCreateFailed&);
+        Reactor(const Reactor& orig) = delete;
+        virtual ~Reactor();
 
+        //GetFreeSize of MemoryPool
+        int GetFreeSize() { return mpMemoryPool ?  mpMemoryPool->GetFreeSize() : 0;}
+        
         //Connect to the backend Server
         eErrorCode Connect()throw (SocketExceptionCreateFailed&,
                 SocketExceptionP2NWrongFormat&,
@@ -65,15 +68,17 @@ namespace CTCPSERVER {
             return true;
         }
         //add a socket to this dealer
-        eErrorCode AddSocketItem(int nfd, SocketInfo * const npSocketInfo) throw(EpollExceptionCtlFailed&);
+        eErrorCode AddSocketItem(int nfd) 
+         throw (LogicalExceptionNoEmptyRoonInMemoryPool&,EpollExceptionCtlFailed&);
         //delete a socket from this dealer
         eErrorCode DeleteSoecktItem(int nfd) throw(EpollExceptionCtlFailed&);
         
         //Data things
-        eErrorCode DataReadAndWritting(const struct epoll_event& npEvent);
+        eErrorCode DataReadAndWritting( struct epoll_event& npEvent);
+    
     private:
         const int mnMaxNumOfSocket;
-        //std::mutex mMutex;
+        std::mutex mMutex;
         std::unique_ptr<EPollObject> mpEpollObject;
         std::unique_ptr<struct epoll_event[]> mpEpollEvents; 
         
@@ -81,9 +86,10 @@ namespace CTCPSERVER {
         std::thread mThread;
         std::atomic<bool> mbRunning;
         
-        //Backend Server, we could pass the data packet to the backend server via socket
-        ServerInfo mBackendServer;
-        int mBackendSocket;
+        std::unique_ptr<MemoryPool<SocketInfo>> mpMemoryPool;
+        std::map<int,SocketInfo*> mMapSocket;
+        //
+        std::unique_ptr<ThreadPool<Event>> mpThreadPool;
         
     };
 }

@@ -31,7 +31,7 @@ namespace CTCPSERVER {
         mpEpollEvents = std::move(lpEvents);
 
         //Allocate a chunk of memory to store the socket info list
-        std::unique_ptr<MemoryPool < SocketInfo >> lpMemoryPool(new MemoryPool<SocketInfo>(mnMaxNumOfSocket));
+        std::unique_ptr<MemoryPool < ConnectionInfo >> lpMemoryPool(new MemoryPool<ConnectionInfo>(mnMaxNumOfSocket));
         mpMemoryPool = std::move(lpMemoryPool);
 
         //Create the workers
@@ -80,7 +80,7 @@ namespace CTCPSERVER {
             throw SocketExceptionConnectFailed(mBackendSocket);
 
         //Set NonBlocking IO
-        SocketInfo::SetNonBlock(mBackendSocket);
+        ConnectionInfo::SetNonBlock(mBackendSocket);
 
         //Add to epoll ,using level_triggered and firstly monitorring EPOLL_OUT event
         epoll_event lEvent;
@@ -101,13 +101,10 @@ namespace CTCPSERVER {
                 int nfds = mpEpollObject->Wait(&mpEpollEvents[0], mnMaxNumOfSocket);
                 //accept this client one by one
                 for (int i = 0; i < nfds; i++) {
-                    try {
-                        DataReadAndWritting(mpEpollEvents[i]);
-                    } catch (std::exception& e) {
-                        //Log the reason
-                        //Continue to work
-                    }
+                    Event lEvent(mpEpollEvents[i], nullptr,this);
+                    mpThreadPool->AddItem(lEvent);
                 }
+
             } catch (EpollExceptionWaitFailed& e) {
 
                 //If it is system call interrupt then continue
@@ -121,23 +118,6 @@ namespace CTCPSERVER {
             } catch (std::exception& e) {
                 //Log the reason
                 //Continue
-            }
-        }
-    }
-
-    //Data things
-
-    eErrorCode Reactor::DataReadAndWritting(struct epoll_event& npEvent) {
-        {
-            if (npEvent.data.fd < 0)
-                throw SocketExceptionInvalidDescriptor(errno, npEvent.data.fd);
-            //deal with the normal data about the clients
-            if (npEvent.events & EPOLLIN) {
-               
-            } else if (npEvent.events & EPOLLOUT) {
-              
-            } else {
-                throw EpollExceptionEventFailed(errno, mpEpollObject->GetEpollID(), npEvent.data.fd);
             }
         }
     }
@@ -193,7 +173,7 @@ namespace CTCPSERVER {
             return eInvalidObject;
 
         //Assign a index of socket info for this file descriptor
-        SocketInfo * lpSocket = mpMemoryPool->alloc();
+        ConnectionInfo * lpSocket = mpMemoryPool->alloc();
         if (lpSocket == nullptr)
             throw LogicalExceptionNoEmptyRoonInMemoryPool(errno, nfd);
         //Construct this chunk of memory

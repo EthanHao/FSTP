@@ -23,7 +23,7 @@
 #include <map>
 #include "Exception.h"
 #include <thread>
-#include "SocketInfo.h"
+#include "ConnectionInfo.h"
 #include "ServerInfo.h"
 #include "ThreadPool.h"
 #include "Event.h"
@@ -86,8 +86,8 @@ namespace CTCPSERVER {
         std::thread mThread;
         std::atomic<bool> mbRunning;
         
-        std::unique_ptr<MemoryPool<SocketInfo>> mpMemoryPool;
-        std::map<int,SocketInfo*> mMapSocket;
+        std::unique_ptr<MemoryPool<ConnectionInfo>> mpMemoryPool;
+        std::map<int,ConnectionInfo*> mMapSocket;
         //
         std::unique_ptr<ThreadPool<Event>> mpThreadPool;
         

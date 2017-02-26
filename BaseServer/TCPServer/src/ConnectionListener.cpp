@@ -13,7 +13,7 @@
 
 #include "../include/ConnectionListener.h"
 #include "../include/CommonMacro.h"
-#include "SocketInfo.h"
+#include "ConnectionInfo.h"
 #include <sys/types.h> /* See NOTES */
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -48,7 +48,7 @@ namespace CTCPSERVER {
         //Set this socket descriptor SO_REUSEADDR ,means we can bind this (ip,port) inaddr_any imediatly 
         //after closing this address, because usually we cannot open it for some time after closing.
         //this flag may cause this TCP server unreliable , care must be taken.
-        SocketInfo::SetReuseAddress(mnListenFileDescriptor);
+        ConnectionInfo::SetReuseAddress(mnListenFileDescriptor);
         
         //Bind to the local ip and port
         struct sockaddr_in addr;
@@ -152,9 +152,9 @@ namespace CTCPSERVER {
         if(lnNewFileDescriptor)
             throw SocketExceptionAcceptFailed(errno,mnListenFileDescriptor);
         //set NON_BLOCKIO, Linger,NoDelay
-        SocketInfo::SetLinger(lnNewFileDescriptor);
-        SocketInfo::SetNoDelay(lnNewFileDescriptor);
-        SocketInfo::SetNonBlock(lnNewFileDescriptor);
+        ConnectionInfo::SetLinger(lnNewFileDescriptor);
+        ConnectionInfo::SetNoDelay(lnNewFileDescriptor);
+        ConnectionInfo::SetNonBlock(lnNewFileDescriptor);
         
         //add to dataDealerCenter to handle reading and writing on this socket
         if(mpReactorCenter != nullptr)

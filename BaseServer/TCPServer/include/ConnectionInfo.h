@@ -5,7 +5,7 @@
  */
 
 /* 
- * File:   SocketInfo.h
+ * File:   ConnectionInfo.h
  * Author: ethan
  *
  * Created on January 30, 2017, 5:27 PM
@@ -27,11 +27,11 @@ namespace CTCPSERVER {
 //the ip address, port, receive buffer, send buffer etc these informations directly related to a socket
 
   
-    class SocketInfo{
+    class ConnectionInfo{
     public:
-        SocketInfo();
-        SocketInfo(const SocketInfo& orig) = delete;
-        virtual ~SocketInfo() = default;
+        ConnectionInfo();
+        ConnectionInfo(const ConnectionInfo& orig) = delete;
+        virtual ~ConnectionInfo() = default;
 
         static void SetNonBlock(int nfd)throw (SocketExceptionSetOptionFailed&) {
             int oldFcntl = ::fcntl(nfd, F_GETFD, 0);
@@ -79,6 +79,9 @@ namespace CTCPSERVER {
         
     public:
         void Set(int nSocket);
+        int Write(const char* npBuf, int nLen);
+        
+        int Read(const char* & bpBuf, int nLen);
         
     private:
         int mnSocketHandle;

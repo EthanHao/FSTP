@@ -5,23 +5,25 @@
  */
 
 /* 
- * File:   SocketInfo.cpp
+ * File:   ConnectionInfo.cpp
  * Author: ethan
  * 
  * Created on January 30, 2017, 5:27 PM
  */
 
-#include "SocketInfo.h"
+#include "ConnectionInfo.h"
 namespace CTCPSERVER {
 
    
-    SocketInfo::SocketInfo(){
+    ConnectionInfo::ConnectionInfo(){
         mnSocketHandle = 0;
         mnReadLen = 0;
         mnUnwrittenLen = 0;
     }
-    void SocketInfo::Set(int nSocket){
+    void ConnectionInfo::Set(int nSocket){
+        mnSocketHandle = nSocket;
         return;
     }
+    
 
 }

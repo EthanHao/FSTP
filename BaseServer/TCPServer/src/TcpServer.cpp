@@ -26,10 +26,16 @@ namespace CTCPSERVER {
                 LogicalExceptionTooManyBackendServer&,
                 LogicalExceptionNoBackendServer&) {
         
-        std::unique_ptr<IReactorCenterInterface> lpCenter(new ReactorCenter(nNumDealer,nMaxSocketSizePerReactor,nNumOfWorkerPerReactor,nBackServers));
+        std::unique_ptr<IReactorCenterInterface> lpCenter(new ReactorCenter(nNumDealer,
+                nMaxSocketSizePerReactor,
+                nNumOfWorkerPerReactor,
+                nBackServers));
         mpReactorCenter = std::move(lpCenter);
         
-        std::unique_ptr<ConnectionListener> lpListener(new ConnectionListener(nIP,nPort,nNumDealer*nMaxSocketSizePerReactor,mpReactorCenter.get()));
+        std::unique_ptr<ConnectionListener> lpListener(new ConnectionListener(nIP,
+                nPort,
+                nNumDealer*nMaxSocketSizePerReactor,
+                mpReactorCenter.get()));
         mpListener = std::move(lpListener);
     }
 

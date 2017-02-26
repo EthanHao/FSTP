@@ -47,7 +47,7 @@ namespace CTCPSERVER {
 
         bool ThreadCallBack() {
             if (mbRunning) {
-               // mConsumerQueue.dequeue().doit();
+                mConsumerQueue.dequeue().doit();
             }
         }
     };

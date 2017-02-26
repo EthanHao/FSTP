@@ -15,7 +15,7 @@
 #define DATADEALERCENTER_H
 #include "ErrorCode.h"
 #include "Reactor.h"
-#include "SocketInfo.h"
+#include "ConnectionInfo.h"
 #include <vector>
 #include <map>
 #include <mutex>

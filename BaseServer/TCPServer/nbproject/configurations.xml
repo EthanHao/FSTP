@@ -43,6 +43,7 @@ Contributor(s):
     <df root="." name="0">
       <df name="include">
         <in>CommonMacro.h</in>
+        <in>ConnectionInfo.h</in>
         <in>ConnectionListener.h</in>
         <in>EPollObject.h</in>
         <in>ErrorCode.h</in>
@@ -51,12 +52,12 @@ Contributor(s):
         <in>Reactor.h</in>
         <in>ReactorCenter.h</in>
         <in>ServerInfo.h</in>
-        <in>SocketInfo.h</in>
         <in>TcpServer.h</in>
       </df>
       <df name="src">
         <in>ConnectionListener.cpp</in>
         <in>EPollObject.cpp</in>
+        <in>Event.cpp</in>
         <in>Reactor.cpp</in>
         <in>ReactorCenter.cpp</in>
         <in>SocketInfo.cpp</in>
@@ -101,7 +102,6 @@ Contributor(s):
                  commonFlags="-mtune=generic -march=x86-64 -fstack-protector-strong"/>
         <element flagsID="1"
                  commonFlags="-mtune=generic -march=x86-64 -std=c++11 -fstack-protector-strong"/>
-        <element flagsID="2" commonFlags="-std=c++11"/>
       </flagsDictionary>
       <codeAssistance>
       </codeAssistance>
@@ -111,6 +111,8 @@ Contributor(s):
           <buildCommand>${MAKE} -f Makefile</buildCommand>
           <cleanCommand>${MAKE} -f Makefile clean</cleanCommand>
           <executablePath>build/Debug/src/welcome</executablePath>
+          <ccTool flags="1">
+          </ccTool>
         </makeTool>
         <preBuild>
           <preBuildCommandWorkingDir>build/Debug</preBuildCommandWorkingDir>
@@ -136,20 +138,29 @@ Contributor(s):
           </incDir>
         </ccTool>
       </item>
+      <item path="src/Event.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="1">
+          <incDir>
+            <pElem>src</pElem>
+            <pElem>include</pElem>
+            <pElem>build/Debug</pElem>
+          </incDir>
+        </ccTool>
+      </item>
       <item path="src/Reactor.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="2">
+        <ccTool flags="1">
           <incDir>
             <pElem>include</pElem>
-            <pElem>../Common/Clog/include</pElem>
+            <pElem>src</pElem>
             <pElem>build/Debug</pElem>
           </incDir>
         </ccTool>
       </item>
       <item path="src/ReactorCenter.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="2">
+        <ccTool flags="1">
           <incDir>
             <pElem>include</pElem>
-            <pElem>../Common/Clog/include</pElem>
+            <pElem>src</pElem>
             <pElem>build/Debug</pElem>
           </incDir>
         </ccTool>
@@ -164,10 +175,10 @@ Contributor(s):
         </ccTool>
       </item>
       <item path="src/TcpServer.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="2">
+        <ccTool flags="1">
           <incDir>
             <pElem>include</pElem>
-            <pElem>../Common/Clog/include</pElem>
+            <pElem>src</pElem>
             <pElem>build/Debug</pElem>
           </incDir>
         </ccTool>
@@ -215,6 +226,8 @@ Contributor(s):
       </makefileType>
       <item path="include/CommonMacro.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/ConnectionInfo.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/ConnectionListener.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/EPollObject.h" ex="false" tool="3" flavor2="0">
@@ -231,11 +244,7 @@ Contributor(s):
       </item>
       <item path="include/ServerInfo.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/SocketInfo.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="include/TcpServer.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/ThreadPool.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/ConnectionListener.cpp" ex="false" tool="1" flavor2="0">
       </item>

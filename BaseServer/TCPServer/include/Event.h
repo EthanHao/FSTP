@@ -13,14 +13,27 @@
 
 #ifndef EVENT_H
 #define EVENT_H
+#include "EPollObject.h"
 
 namespace CTCPSERVER {
     
     class Event{
     private:
-        int nSocket;
-        SocketInfo* npSocketInfo;
-        
+        struct epoll_event mepollEvent;
+        void *mpEventHandler;
+        void *mpReactor;
+    public:
+        Event(){
+            memset(&mepollEvent,0,sizeof(mepollEvent));
+            mpEventHandler = nullptr;
+            mpReactor = nullptr;
+        }
+        Event(const struct epoll_event & nEpollEvent,void* npHandler,void * npReactor ){
+            memcpy(&mepollEvent,&nEpollEvent,sizeof(mepollEvent));
+            mpEventHandler = npHandler;
+            mpReactor = npReactor;
+        }
+        void doit();
     };
 }
 

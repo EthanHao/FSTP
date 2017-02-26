@@ -172,20 +172,20 @@ namespace CTCPSERVER {
         if (!mpEpollObject)
             return eInvalidObject;
 
-        //Assign a index of socket info for this file descriptor
-        ConnectionInfo * lpSocket = mpMemoryPool->alloc();
-        if (lpSocket == nullptr)
+        //Assign a index of Connection info for this file descriptor
+        ConnectionInfo * lpCon = mpMemoryPool->alloc();
+        if (lpCon == nullptr)
             throw LogicalExceptionNoEmptyRoonInMemoryPool(errno, nfd);
         //Construct this chunk of memory
-        lpSocket->Set(nfd);
+        lpCon->Set(nfd);
 
         struct epoll_event ev;
         ev.events = EPOLLIN; //use the level triggered mode to monitor the reading event
-        ev.data.ptr = lpSocket;
+        ev.data.ptr = lpCon;
         try {
             mpEpollObject->AddFileDescriptor(nfd, ev);
         } catch (EpollExceptionCtlFailed& e) {
-            mpMemoryPool->free(lpSocket);
+            mpMemoryPool->free(lpCon);
             throw e;
         }
         return eErrorCode::eSuccess;

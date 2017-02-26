@@ -33,7 +33,21 @@ namespace CTCPSERVER {
             mpEventHandler = npHandler;
             mpReactor = npReactor;
         }
-        void doit();
+        void doit(); 
+        
+        uint32_t GetEventType() const {
+            return mepollEvent.events;
+        }
+        void * GetConnectionInfo() const{
+            return mepollEvent.data.ptr;
+        }
+        int GetSocketFileDescriptor() const{
+            return mepollEvent.data.fd;
+        }
+        void* GetReactor() const{
+            return mpReactor;
+        }
+        
     };
 }
 

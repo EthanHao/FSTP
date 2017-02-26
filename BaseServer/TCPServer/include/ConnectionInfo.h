@@ -78,17 +78,19 @@ namespace CTCPSERVER {
         }
         
     public:
-        void Set(int nSocket);
-        int Write(const char* npBuf, int nLen);
+        void Set(int nSocketm);
+              
+      
+        //Send a input buffer
+        int Send(const char* npBuf = nullptr, int nLen = 0) ;
         
-        int Read(const char* & bpBuf, int nLen);
-        
+        int Recieve(void * npStreamChecker);
     private:
         int mnSocketHandle;
         int mnSizeOfKernalReadBuffer;
         int mnSizeOfKernalWriteBuffer;
         long mLastActiveTime;
-        
+       
         char mReadBuffer[4096];
         int  mnReadLen;
         char mUnwrittenBuffer[4096];

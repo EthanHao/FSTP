@@ -89,72 +89,100 @@ namespace CTCPSERVER {
     class SocketException : public std::exception {
     public:
 
-        SocketException(const int nErrorNo,const int nSocketHandle = 0) : _errorno(nErrorNo),_socketHandle(nSocketHandle) {
+        SocketException(const int nErrorNo,const int nSocketHandle = 0,const int nCustomeErrorNo = 0) :
+        _errorno(nErrorNo),_socketHandle(nSocketHandle),_customeErrorNo(nCustomeErrorNo) {
         }
 
         const char* what() const throw () {
             return strerror(_errorno);
         }
-        const int GetErrorNo() {
+        const int GetErrorNo() const{
             return _errorno;
         }
-        const int GetSocketHandle() {
+        const int GetSocketHandle()const {
             return _socketHandle;
+        }
+        const int GetCustomeErrorNo()const{
+            return _customeErrorNo;
         }
     private:
         const int _errorno;
         const int _socketHandle;
+        const int _customeErrorNo;
 
     };
     
     class SocketExceptionCreateFailed : public SocketException {
     public:
-        SocketExceptionCreateFailed(const int nErrorNo,const int nSocketHandle = 0) : SocketException(nErrorNo,nSocketHandle) {
+        SocketExceptionCreateFailed(const int nErrorNo,const int nSocketHandle = 0,const int nCustomeErrorNo = 0) :
+        SocketException(nErrorNo,nSocketHandle,nCustomeErrorNo) {
         }
     };
     class SocketExceptionSetOptionFailed : public SocketException {
     public:
-        SocketExceptionSetOptionFailed(const int nErrorNo,const int nSocketHandle = 0) : SocketException(nErrorNo,nSocketHandle){
+        SocketExceptionSetOptionFailed(const int nErrorNo,const int nSocketHandle = 0,const int nCustomeErrorNo = 0) :
+        SocketException(nErrorNo,nSocketHandle,nCustomeErrorNo){
         }
     };
     class SocketExceptionBindFailed : public SocketException {
     public:
-        SocketExceptionBindFailed(const int nErrorNo,const int nSocketHandle = 0) : SocketException(nErrorNo,nSocketHandle) {
+        SocketExceptionBindFailed(const int nErrorNo,const int nSocketHandle = 0,const int nCustomeErrorNo = 0) :
+        SocketException(nErrorNo,nSocketHandle,nCustomeErrorNo) {
         }
     };
     class SocketExceptionListenFailed : public SocketException {
     public:
-        SocketExceptionListenFailed(const int nErrorNo,const int nSocketHandle = 0) : SocketException(nErrorNo,nSocketHandle){
+        SocketExceptionListenFailed(const int nErrorNo,const int nSocketHandle = 0,const int nCustomeErrorNo = 0) :
+        SocketException(nErrorNo,nSocketHandle,nCustomeErrorNo){
         }
     };
     class SocketExceptionAcceptFailed : public SocketException {
     public:
-        SocketExceptionAcceptFailed(const int nErrorNo,const int nSocketHandle = 0) : SocketException(nErrorNo,nSocketHandle) {
+        SocketExceptionAcceptFailed(const int nErrorNo,const int nSocketHandle = 0,const int nCustomeErrorNo = 0) :
+        SocketException(nErrorNo,nSocketHandle,nCustomeErrorNo){
         }
     };
     class SocketExceptionP2NFailed : public SocketException {
     public:
-        SocketExceptionP2NFailed(const int nErrorNo,const int nSocketHandle = 0) : SocketException(nErrorNo,nSocketHandle) {
+        SocketExceptionP2NFailed(const int nErrorNo,const int nSocketHandle = 0,const int nCustomeErrorNo = 0) :
+        SocketException(nErrorNo,nSocketHandle,nCustomeErrorNo) {
         }
     };
     class SocketExceptionP2NWrongFormat : public SocketException {
     public:
-        SocketExceptionP2NWrongFormat(const int nErrorNo,const int nSocketHandle = 0) : SocketException(nErrorNo,nSocketHandle) {
+        SocketExceptionP2NWrongFormat(const int nErrorNo,const int nSocketHandle = 0,const int nCustomeErrorNo = 0) :
+        SocketException(nErrorNo,nSocketHandle,nCustomeErrorNo) {
         }
     };
     class SocketExceptionH2SFailed : public SocketException {
     public:
-        SocketExceptionH2SFailed(const int nErrorNo,const int nSocketHandle = 0) : SocketException(nErrorNo,nSocketHandle) {
+        SocketExceptionH2SFailed(const int nErrorNo,const int nSocketHandle = 0,const int nCustomeErrorNo = 0) :
+        SocketException(nErrorNo,nSocketHandle,nCustomeErrorNo) {
         }
     };
     class SocketExceptionConnectFailed : public SocketException {
     public:
-        SocketExceptionConnectFailed(const int nErrorNo,const int nSocketHandle = 0) : SocketException(nErrorNo,nSocketHandle) {
+        SocketExceptionConnectFailed(const int nErrorNo,const int nSocketHandle = 0,const int nCustomeErrorNo = 0) :
+        SocketException(nErrorNo,nSocketHandle,nCustomeErrorNo) {
         }
     };
     class SocketExceptionInvalidDescriptor : public SocketException {
     public:
-        SocketExceptionInvalidDescriptor(const int nErrorNo,const int nSocketHandle = 0) : SocketException(nErrorNo,nSocketHandle) {
+        SocketExceptionInvalidDescriptor(const int nErrorNo,const int nSocketHandle = 0,const int nCustomeErrorNo = 0) :
+        SocketException(nErrorNo,nSocketHandle,nCustomeErrorNo) {
+        }
+    };
+    
+    class SocketExceptionReadFaild : public SocketException {
+    public:
+        SocketExceptionReadFaild(const int nErrorNo,const int nSocketHandle = 0,const int nCustomeErrorNo = 0) :
+        SocketException(nErrorNo,nSocketHandle,nCustomeErrorNo) {
+        }
+    };
+    class SocketExceptionWriteFaild : public SocketException {
+    public:
+        SocketExceptionWriteFaild(const int nErrorNo,const int nSocketHandle = 0,const int nCustomeErrorNo = 0) :
+        SocketException(nErrorNo,nSocketHandle,nCustomeErrorNo) {
         }
     };
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -220,6 +248,16 @@ namespace CTCPSERVER {
      class LogicalExceptionNoEmptyRoonInMemoryPool : public LogicalException {
     public:
         LogicalExceptionNoEmptyRoonInMemoryPool(const int& nErrorNo,const int& SocketHandle = 0) : LogicalException(nErrorNo,SocketHandle) {
+        }
+    };
+     class LogicalExceptionNoEngoughBuffer: public LogicalException {
+    public:
+        LogicalExceptionNoEngoughBuffer(const int& nErrorNo,const int& SocketHandle = 0) : LogicalException(nErrorNo,SocketHandle) {
+        }
+    };
+     class LogicalExceptionInvalidObject : public LogicalException {
+    public:
+        LogicalExceptionInvalidObject(const int& nErrorNo,const int& SocketHandle = 0) : LogicalException(nErrorNo,SocketHandle) {
         }
     };
 }

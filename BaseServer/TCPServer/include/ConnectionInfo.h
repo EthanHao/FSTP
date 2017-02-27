@@ -21,7 +21,10 @@
 #include <arpa/inet.h>
 #include <netinet/tcp.h>
  #include <fcntl.h>
+
+
 namespace CTCPSERVER {
+    constexpr int MAX_BUFFER_SIZE = 10240;
 //store everything related to a socket handle
 //like we can assign an unique name for this socket
 //the ip address, port, receive buffer, send buffer etc these informations directly related to a socket
@@ -84,16 +87,18 @@ namespace CTCPSERVER {
         //Send a input buffer
         int Send(const char* npBuf = nullptr, int nLen = 0) ;
         
-        int Recieve(void * npStreamChecker);
+        void Recieve(void * npEventHandler) 
+            throw(SocketExceptionWriteFaild&,LogicalExceptionInvalidObject&,LogicalExceptionNoEngoughBuffer&);
     private:
+       
         int mnSocketHandle;
         int mnSizeOfKernalReadBuffer;
         int mnSizeOfKernalWriteBuffer;
         long mLastActiveTime;
        
-        char mReadBuffer[4096];
+        char* mReadBuffer;
         int  mnReadLen;
-        char mUnwrittenBuffer[4096];
+        char*mUnwrittenBuffer;
         int mnUnwrittenLen;
 
     };

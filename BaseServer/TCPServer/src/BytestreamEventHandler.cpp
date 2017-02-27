@@ -10,7 +10,7 @@
 #include "PacketHearder.h"
 namespace CTCPSERVER {
 
-    int BytestreamEevetHandler::BytestreamChecker::operator()(char * & lp, int nLen) {
+    int BytestreamEevetHandler::BytestreamChecker::operator()(char * const lp, int nLen) {
         if(nLen < sizeof(PacketHeader))
             return 0;
         int lnOffset = 0;
@@ -39,7 +39,10 @@ namespace CTCPSERVER {
         uint32_t lnEventType = nEvent.GetEventType();
         if(lnEventType & EPOLLIN){
             lpConInfo->Recieve(mpBytestreamChecker.get());
-        }else  if(lnEventType & EPOLLOUT){
+        }else  if(lnEventType & EPOLLERR){
+            //Close this socket
+        }
+        else  if(lnEventType & EPOLLOUT){
             lpConInfo->Send();
         }
         return true;

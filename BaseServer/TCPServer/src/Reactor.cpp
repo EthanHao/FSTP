@@ -180,7 +180,7 @@ namespace CTCPSERVER {
         lpCon->Set(nfd);
 
         struct epoll_event ev;
-        ev.events = EPOLLIN; //use the level triggered mode to monitor the reading event
+        ev.events = EPOLLIN|EPOLLET; //use the Edge triggered mode to monitor the reading event
         ev.data.ptr = lpCon;
         try {
             mpEpollObject->AddFileDescriptor(nfd, ev);

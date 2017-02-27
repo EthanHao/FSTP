@@ -16,7 +16,7 @@
 namespace CTCPSERVER {
    class  IStreamChecker{
         public:
-            virtual int operator()(char * & lp, int nLen) = 0 ;
+            virtual int operator()(char * const lp, int nLen) = 0 ;
         };
 }
 

@@ -13,10 +13,13 @@
 
 #ifndef EVENTHANDLEINTERFACE_H
 #define EVENTHANDLEINTERFACE_H
+
+#include "Event.h"
 namespace CTCPSERVER {
     class IEventHandler{
     public:
         virtual bool HandleEvent(const Event & nEvent,void * npReactor) = 0;
+       
     };
 }
 

@@ -49,47 +49,7 @@ namespace CTCPSERVER {
         //Wait the termination of the thread
         StopAndWait();
     }
-    /*//Connect to the backend Server
-
-    eErrorCode Reactor::Connect() throw (SocketExceptionCreateFailed&,
-            SocketExceptionP2NWrongFormat&,
-            SocketExceptionP2NFailed&,
-            SocketExceptionConnectFailed&,
-            SocketExceptionSetOptionFailed&) {
-
-
-        //Construct the serverAdd_in 
-        struct sockaddr_in servaddr;
-        bzero(&servaddr, sizeof (struct sockaddr_in));
-        servaddr.sin_family = PF_INET;
-        servaddr.sin_port = htons(mBackendServer.GetPort());
-        int lnRet = inet_pton(AF_INET, mBackendServer.GetName().c_str(), &servaddr.sin_addr);
-        if (lnRet == 0)
-            throw SocketExceptionP2NWrongFormat(errno);
-        if (lnRet < 0)
-            throw SocketExceptionP2NFailed(errno);
-
-        //Create a IPV4 TCP Socket
-        mBackendSocket = ::socket(AF_INET, SOCK_STREAM, SOCK_NONBLOCK);
-        if (FAILED(mBackendSocket))
-            throw SocketExceptionCreateFailed(errno);
-
-        //Connect
-        lnRet = ::connect(mBackendSocket, (struct sockaddr *) &servaddr, sizeof (servaddr));
-        if (FAILED(mBackendSocket))
-            throw SocketExceptionConnectFailed(mBackendSocket);
-
-        //Set NonBlocking IO
-        ConnectionInfo::SetNonBlock(mBackendSocket);
-
-        //Add to epoll ,using level_triggered and firstly monitorring EPOLL_OUT event
-        epoll_event lEvent;
-        lEvent.events = EPOLLOUT;
-        lEvent.data.ptr = nullptr;
-        mpEpollObject->AddFileDescriptor(mBackendSocket, lEvent);
-
-    }*/
-
+   
 
     //Thread call back function
 
@@ -122,33 +82,7 @@ namespace CTCPSERVER {
         }
     }
 
-    /*eErrorCode Reactor::ReadFromClient(int nSocketFD) {
-        //Read the content to append to the existing buffer which has content reading previously
-        //Parse the content 
-        //For loop
-        //  --Delete the invalid data from this stream
-        //  --if we can get a valid packet from this content
-        //  ----Deal this packet(including append the packet to the waiting list to send over to the backend)
-        //  --else wait to the next time to get a valid packet
-        
-
-    }
-
-    eErrorCode Reactor::ReadFromBackendServer(int nSocketFD) {
-
-    }
-
-    eErrorCode Reactor::WriteToClient(int nSocketFD) {
-        //Send all the sending buffer in waiting list 
-        //if write to the kernal buffer until it is full
-        //Change the epollevent to epollout|epoollin
-
-    }
-
-    eErrorCode Reactor::WriteToBackendServer(int nSocketFD) {
-
-    }
-    */
+   
     eErrorCode Reactor::Run() throw (ThreadExceptionCreateFailed&) {
         if (mbRunning || mThread.joinable())
             return eErrorCode::eIsRunning;
@@ -177,7 +111,7 @@ namespace CTCPSERVER {
         if (lpCon == nullptr)
             throw LogicalExceptionNoEmptyRoonInMemoryPool(errno, nfd);
         //Construct this chunk of memory
-        lpCon->Set(nfd);
+        lpCon->Set(nfd,mpEpollObject.get());
 
         struct epoll_event ev;
         ev.events = EPOLLIN|EPOLLET; //use the Edge triggered mode to monitor the reading event

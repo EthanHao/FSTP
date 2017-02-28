@@ -103,6 +103,7 @@ Contributor(s):
                  commonFlags="-mtune=generic -march=x86-64 -fstack-protector-strong"/>
         <element flagsID="1"
                  commonFlags="-mtune=generic -march=x86-64 -std=c++11 -fstack-protector-strong"/>
+        <element flagsID="2" commonFlags="-std=c++11"/>
       </flagsDictionary>
       <codeAssistance>
       </codeAssistance>
@@ -167,10 +168,10 @@ Contributor(s):
         </ccTool>
       </item>
       <item path="src/Reactor.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
+        <ccTool flags="2">
           <incDir>
             <pElem>include</pElem>
-            <pElem>src</pElem>
+            <pElem>../Common/Clog/include</pElem>
             <pElem>build/Debug</pElem>
           </incDir>
         </ccTool>

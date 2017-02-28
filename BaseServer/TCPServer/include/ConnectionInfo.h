@@ -21,8 +21,9 @@
 #include <arpa/inet.h>
 #include <netinet/tcp.h>
  #include <fcntl.h>
-
-
+#include <vector>
+#include "EPollObject.h"
+#include <stdexcept> 
 namespace CTCPSERVER {
     constexpr int MAX_BUFFER_SIZE = 10240;
 //store everything related to a socket handle
@@ -80,25 +81,30 @@ namespace CTCPSERVER {
                 throw SocketExceptionSetOptionFailed(errno,nfd);
         }
         
+        void ConcatenateBufferToUnwrittenBuffer(const char* npBuf,int nOffset,int nLen);
+        void CopyBufferToReadedBuffer(const char* npBuf,int nOffset, int nLen);
     public:
-        void Set(int nSocketm);
+        void Set(int nSocketm,EPollObject * nObject);
               
       
         //Send a input buffer
-        int Send(const char* npBuf = nullptr, int nLen = 0) ;
+        eErrorCode Send() throw(SocketExceptionWriteFaild&);
+        
+        eErrorCode Send(const char* npBuf ,const int nLen) 
+                throw(std::invalid_argument&,SocketExceptionWriteFaild&,EpollExceptionCtlFailed&);
         
         void Recieve(void * npEventHandler) 
-            throw(SocketExceptionWriteFaild&,LogicalExceptionInvalidObject&,LogicalExceptionNoEngoughBuffer&);
-    private:
+          throw (SocketExceptionReadFaild&, LogicalExceptionInvalidObject&, LogicalExceptionNoEngoughBuffer&) ;
+     private:
        
         int mnSocketHandle;
         int mnSizeOfKernalReadBuffer;
         int mnSizeOfKernalWriteBuffer;
         long mLastActiveTime;
-       
-        char* mReadBuffer;
+        EPollObject * mpEpollObject;
+        std::vector<char>  mReadBuffer;
         int  mnReadLen;
-        char*mUnwrittenBuffer;
+        std::vector<char> mUnwrittenBuffer;
         int mnUnwrittenLen;
 
     };

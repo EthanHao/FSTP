@@ -25,7 +25,7 @@ namespace CTCPSERVER {
         public:
             BytestreamChecker() {
             };
-            virtual int operator()(char * const lp, int nLen) ;
+            virtual int operator()(char * const lp, int nLen) noexcept;
         };
 
     public:

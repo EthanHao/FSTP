@@ -22,6 +22,8 @@ enum eErrorCode {
         eIsRunning = BASE_ERROR,
         eInvalidObject = BASE_ERROR + 1,
         eMemoryPoolIsFull ,
+        eBufferAllSent,
+        eBufferNotAllSent,
 
     };
 }

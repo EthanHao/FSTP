@@ -10,7 +10,7 @@
 #include "PacketHearder.h"
 namespace CTCPSERVER {
 
-    int BytestreamEevetHandler::BytestreamChecker::operator()(char * const lp, int nLen) {
+    int BytestreamEevetHandler::BytestreamChecker::operator()(char * const lp, int nLen) noexcept{
         if(nLen < sizeof(PacketHeader))
             return 0;
         int lnOffset = 0;

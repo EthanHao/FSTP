@@ -132,10 +132,10 @@ Contributor(s):
         </ccTool>
       </item>
       <item path="src/ConnectionInfo.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
+        <ccTool flags="2">
           <incDir>
             <pElem>include</pElem>
-            <pElem>src</pElem>
+            <pElem>../Common/Clog/include</pElem>
             <pElem>build/Debug</pElem>
           </incDir>
         </ccTool>

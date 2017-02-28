@@ -86,7 +86,7 @@ namespace CTCPSERVER {
         }else{
             //we have send all Clear EpollOut
             struct epoll_event ev;
-            ev.events = EPOLLIN; 
+            ev.events = EPOLLIN| EPOLLET; 
             ev.data.ptr = this;
             mpEpollObject->ModifyFileDescriptor(mnSocketHandle,ev);
             return eErrorCode::eBufferAllSent;
@@ -121,13 +121,13 @@ namespace CTCPSERVER {
                 ConcatenateBufferToUnwrittenBuffer(npBuf, n, nLen);
                 //Set epollout|epollin
                 struct epoll_event ev;
-                ev.events = EPOLLIN | EPOLLOUT;
+                ev.events = EPOLLIN | EPOLLOUT | EPOLLET;
                 ev.data.ptr = this;
                 mpEpollObject->ModifyFileDescriptor(mnSocketHandle, ev);
             } else {
                 //Clear epollout
                 struct epoll_event ev;
-                ev.events = EPOLLIN;
+                ev.events = EPOLLIN| EPOLLET;
                 ev.data.ptr = this;
                 mpEpollObject->ModifyFileDescriptor(mnSocketHandle, ev);
             }
@@ -139,7 +139,7 @@ namespace CTCPSERVER {
             //Set epollout|epollin
             //Set epollout|epollin
             struct epoll_event ev;
-            ev.events = EPOLLIN | EPOLLOUT;
+            ev.events = EPOLLIN | EPOLLOUT| EPOLLET;
             ev.data.ptr = this;
             mpEpollObject->ModifyFileDescriptor(mnSocketHandle, ev);
         }

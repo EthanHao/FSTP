@@ -65,6 +65,9 @@ namespace CTCPSERVER {
         while (n > 0) {
             lnWritten = ::write(mnSocketHandle, &mUnwrittenBuffer[0] + mnUnwrittenLen - n, n);
             if (lnWritten < n) {
+                
+                if(lnWritten == -1 && errno != EINTR)
+                    continue;
                 if (lnWritten == -1 && errno != EAGAIN) {
                      throw new SocketExceptionWriteFaild(errno, mnSocketHandle, -1);
                 }
@@ -108,6 +111,8 @@ namespace CTCPSERVER {
             while (n > 0) {
                 lnWritten = ::write(mnSocketHandle, npBuf + nLen - n, n);
                 if (lnWritten < n) {
+                    if(lnWritten == -1 && errno != EINTR)
+                         continue;
                     if (lnWritten == -1 && errno != EAGAIN) {
                         throw new SocketExceptionWriteFaild(errno, mnSocketHandle, -1);
                     }
